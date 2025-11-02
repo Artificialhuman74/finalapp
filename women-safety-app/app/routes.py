@@ -11,10 +11,33 @@ from flask import send_from_directory
 
 bp = Blueprint('main', __name__)
 
-# Gemini API configuration
-GEMINI_API_KEY = 'AIzaSyCWa3C1wZ0cG1bSdEqFAdHs826i34HY5k0'
-# Use Gemini 2.0 Flash - latest stable model
-GEMINI_API_URL = f'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key={GEMINI_API_KEY}'
+# Gemini API configuration (read from environment). Never hardcode keys.
+def _gemini_url():
+    key = os.environ.get('GEMINI_API_KEY')
+    model = os.environ.get('GEMINI_MODEL', 'gemini-1.5-flash')
+    if not key:
+        return None
+    return f'https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={key}'
+
+def _rule_based_support_reply(user_message: str):
+    msg = (user_message or '').lower()
+    base = [
+        "I'm here with you. That sounds really difficult—your feelings are valid.",
+        "You're not alone. Would you like a few quick safety steps we can plan together?",
+        "If you ever feel in immediate danger, please call 181 (Women Helpline) or 100 (Police)."
+    ]
+    tips = []
+    if any(w in msg for w in ['home','house','family','partner','husband','boyfriend']):
+        tips.append("Consider a safe contact you can reach fast and a code word to signal help.")
+    if any(w in msg for w in ['work','office','boss','colleague']):
+        tips.append("Document incidents with dates and brief notes; talk to a trusted HR contact if possible.")
+    if any(w in msg for w in ['online','instagram','whatsapp','social','dm','stalking']):
+        tips.append("Take screenshots, tighten privacy settings, and block/report the account.")
+    if any(w in msg for w in ['night','street','bus','auto','cab','uber','ola']):
+        tips.append("Share live location with a friend and sit near exits or well‑lit areas when possible.")
+    if not tips:
+        tips.append("Take a deep breath; we can make a small safety plan for the next 24 hours.")
+    return " ".join(base[:2]) + " " + tips[0]
 
 # Allowed file extensions
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp3', 'wav', 'm4a', 'mp4', 'mov', 'pdf', 'webm'}
@@ -768,14 +791,9 @@ def api_sos_deactivate():
         db.session.rollback()
         return jsonify({'success': False, 'error': str(e)}), 500
 
-@bp.route('/onboarding')
-def onboarding():
-    """Onboarding page with permission requests for first-time users"""
-    return render_template('onboarding.html')
-
 @bp.route('/')
 def index():
-    """Landing page with introduction to Gringotts"""
+    """Landing page with introduction to SafeSpace"""
     return render_template('landing.html')
 
 @bp.route('/report')
@@ -901,75 +919,78 @@ def generate_ai_summary(data):
         f"Details to include: Person: {person}; Incident: {incident}; Who involved: {who}; Location: {location}; Date: {date_str}; Impact: {impact}."
     )
 
-    # Call Gemini API and return the generated summary with sensible fallbacks
-    try:
-        payload = {
-            "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"maxOutputTokens": 300}
-        }
-        response = requests.post(
-            GEMINI_API_URL,
-            headers={'Content-Type': 'application/json'},
-            json=payload,
-            timeout=30
-        )
-        if response.status_code == 200:
-            result = response.json()
-            if 'candidates' in result and result['candidates']:
-                return result['candidates'][0]['content']['parts'][0]['text'].strip()
-            # No content returned
-            return (
-                f"Anonymous reported an incident involving {who} at {location}. "
-                f"Impacts noted: {impact}. Date: {date_str}."
+    # Prefer Gemini if API key is configured; otherwise produce a crisp rule‑based summary
+    url = _gemini_url()
+    if url:
+        try:
+            payload = {
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {"maxOutputTokens": 300}
+            }
+            response = requests.post(
+                url,
+                headers={'Content-Type': 'application/json'},
+                json=payload,
+                timeout=30
             )
-        # API error fallback
-        return (
-            f"Anonymous reported an incident involving {who} at {location}. "
-            f"Impacts noted: {impact}. Date: {date_str}."
-        )
-    except Exception:
-        # Network or parsing error fallback
-        return (
-            f"Anonymous reported an incident involving {who} at {location}. "
-            f"Impacts noted: {impact}. Date: {date_str}."
-        )
+            if response.status_code == 200:
+                result = response.json()
+                if 'candidates' in result and result['candidates']:
+                    return result['candidates'][0]['content']['parts'][0]['text'].strip()
+        except Exception:
+            pass
+
+    # Deterministic fallback (no external API)
+    pieces = []
+    pieces.append(f"On {date_str}, {person} experienced a {incident.lower()} involving {who.lower()}.")
+    if location and location != 'Not specified':
+        pieces.append(f"The incident occurred around {location}.")
+    if impact and impact != 'Not specified':
+        pieces.append(f"Reported impacts include: {impact.lower()}.")
+    details = data.get('additional_details') or ''
+    if details:
+        pieces.append("Additional context was provided and has been noted for the record.")
+    pieces.append("This summary avoids sensitive identifiers and focuses on key facts to support next steps.")
+    return " ".join(pieces)
 
 def generate_first_person_story(data, ai_summary):
     """Rewrite the AI summary into an empathetic first-person community post.
     Falls back to a safe minimal variant if the AI call fails."""
     try:
-        details = data.get('additional_details') or ''
-        time_hint = data.get('incident_time') or ''
-        prompt = (
-            "Rewrite the following incident description into a first-person, supportive community post. "
-            "Use plain, respectful language, keep it anonymous (do not include names, addresses, phone numbers, or employers). "
-            "Avoid placeholders like [Your Name]. Focus on what I experienced, how it affected me, and what support I’m seeking. "
-            "Target length: 80-130 words in one paragraph.\n\n"
-            f"Incident type: {data.get('incident_type') or 'Not specified'}\n"
-            f"Who involved: {data.get('who_involved') or 'Not specified'}\n"
-            f"Location: {data.get('location') or 'Not specified'}\n"
-            f"Approx. time: {time_hint or 'Not specified'}\n"
-            f"Impacts: {', '.join(data.get('impact') or []) or 'Not specified'}\n"
-            f"Additional details: {details}\n\n"
-            "Original summary (third-person):\n" + (ai_summary or '') + "\n\n"
-            "Now produce the final first-person post starting with 'I' or 'Today I', without headings:"
-        )
+        url = _gemini_url()
+        if url:
+            details = data.get('additional_details') or ''
+            time_hint = data.get('incident_time') or ''
+            prompt = (
+                "Rewrite the following incident description into a first-person, supportive community post. "
+                "Use plain, respectful language, keep it anonymous (do not include names, addresses, phone numbers, or employers). "
+                "Avoid placeholders like [Your Name]. Focus on what I experienced, how it affected me, and what support I’m seeking. "
+                "Target length: 80-130 words in one paragraph.\n\n"
+                f"Incident type: {data.get('incident_type') or 'Not specified'}\n"
+                f"Who involved: {data.get('who_involved') or 'Not specified'}\n"
+                f"Location: {data.get('location') or 'Not specified'}\n"
+                f"Approx. time: {time_hint or 'Not specified'}\n"
+                f"Impacts: {', '.join(data.get('impact') or []) or 'Not specified'}\n"
+                f"Additional details: {details}\n\n"
+                "Original summary (third-person):\n" + (ai_summary or '') + "\n\n"
+                "Now produce the final first-person post starting with 'I' or 'Today I', without headings:"
+            )
 
-        payload = {
-            "contents": [{"parts": [{"text": prompt}]}],
-            "generationConfig": {"maxOutputTokens": 300}
-        }
-        response = requests.post(
-            GEMINI_API_URL,
-            headers={'Content-Type': 'application/json'},
-            json=payload,
-            timeout=30
-        )
-        if response.status_code == 200:
-            result = response.json()
-            if 'candidates' in result and result['candidates']:
-                return result['candidates'][0]['content']['parts'][0]['text'].strip()
-    except Exception as _:
+            payload = {
+                "contents": [{"parts": [{"text": prompt}]}],
+                "generationConfig": {"maxOutputTokens": 300}
+            }
+            response = requests.post(
+                url,
+                headers={'Content-Type': 'application/json'},
+                json=payload,
+                timeout=30
+            )
+            if response.status_code == 200:
+                result = response.json()
+                if 'candidates' in result and result['candidates']:
+                    return result['candidates'][0]['content']['parts'][0]['text'].strip()
+    except Exception:
         pass
     # Fallback minimal first-person version
     base = ai_summary or 'I experienced an incident and wanted to share here for support.'
@@ -1516,59 +1537,41 @@ User: {user_message}
 
 Response (be warm, supportive, and helpful):"""
     
-    try:
-        # Call Gemini API
-        payload = {
-            "contents": [{
-                "parts": [{
-                    "text": prompt
-                }]
-            }],
-            "generationConfig": {
-                "temperature": 0.8,
-                "topK": 40,
-                "topP": 0.95,
-                "maxOutputTokens": 400
+    url = _gemini_url()
+    if url:
+        try:
+            payload = {
+                "contents": [{
+                    "parts": [{
+                        "text": prompt
+                    }]
+                }],
+                "generationConfig": {
+                    "temperature": 0.8,
+                    "topK": 40,
+                    "topP": 0.95,
+                    "maxOutputTokens": 400
+                }
             }
-        }
-        
-        response = requests.post(
-            GEMINI_API_URL,
-            headers={'Content-Type': 'application/json'},
-            json=payload,
-            timeout=30
-        )
-        
-        if response.status_code == 200:
-            result = response.json()
-            if 'candidates' in result and len(result['candidates']) > 0:
-                ai_response = result['candidates'][0]['content']['parts'][0]['text']
-                return jsonify({
-                    'success': True,
-                    'message': ai_response.strip()
-                })
-            else:
-                return jsonify({
-                    'success': False,
-                    'message': "I'm here for you, but I'm having trouble responding right now. Please try again or call 181 for immediate support."
-                }), 500
-        else:
-            return jsonify({
-                'success': False,
-                'message': "I'm experiencing technical difficulties. Please call 181 (Women Helpline) for immediate support."
-            }), 500
-            
-    except requests.exceptions.Timeout:
-        return jsonify({
-            'success': False,
-            'message': "The response is taking longer than expected. Please try again or call 181 for immediate help."
-        }), 500
-    except Exception as e:
-        print(f"Chat API Error: {str(e)}")
-        return jsonify({
-            'success': False,
-            'message': "I'm here to help, but I'm having technical issues. Please call 181 (Women Helpline) for support."
-        }), 500
+            response = requests.post(
+                url,
+                headers={'Content-Type': 'application/json'},
+                json=payload,
+                timeout=30
+            )
+            if response.status_code == 200:
+                result = response.json()
+                if 'candidates' in result and len(result['candidates']) > 0:
+                    ai_response = result['candidates'][0]['content']['parts'][0]['text']
+                    return jsonify({'success': True, 'message': ai_response.strip()})
+        except requests.exceptions.Timeout:
+            return jsonify({'success': False, 'message': "The response is taking longer than expected. Please try again or call 181 for immediate help."}), 500
+        except Exception as e:
+            print(f"Chat API Error: {str(e)}")
+
+    # Rule-based fallback (works offline without API key)
+    fallback = _rule_based_support_reply(user_message)
+    return jsonify({'success': True, 'message': fallback})
 
 # ============ SAFE ROUTES FEATURE ============
 import pandas as pd

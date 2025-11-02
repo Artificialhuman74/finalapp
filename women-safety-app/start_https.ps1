@@ -1,25 +1,41 @@
-# Women's Safety App - HTTPS Server Starter
-# Run this script to start the app with HTTPS support
+param(
+	[int]$Port = 5443,
+	[switch]$Open
+)
 
-Write-Host "`n============================================================" -ForegroundColor Cyan
-Write-Host "🚀 Starting Women's Safety App with HTTPS..." -ForegroundColor Green
-Write-Host "============================================================`n" -ForegroundColor Cyan
+Write-Host "=== Women Safety App: Start HTTPS ===" -ForegroundColor Cyan
+$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+Set-Location $ScriptDir
 
-# Set environment variables
-$env:PYTHONPATH = "c:\Users\abhi1\OneDrive\Desktop\women-safety\women-safety-app"
-$env:FLASK_ENV = "development"
-
-# Get local IP address
-$localIP = (Get-NetIPAddress -AddressFamily IPv4 | Where-Object { $_.InterfaceAlias -notlike "*Loopback*" -and $_.InterfaceAlias -notlike "*VirtualBox*" -and $_.InterfaceAlias -notlike "*VMware*" }).IPAddress | Select-Object -First 1
-
-Write-Host "📱 Access URLs:" -ForegroundColor Yellow
-Write-Host "   Local:  https://localhost:5000" -ForegroundColor White
-if ($localIP) {
-    Write-Host "   Mobile: https://$localIP`:5000" -ForegroundColor White
-    Write-Host "`n💡 Use the Mobile URL on your phone (same WiFi network)" -ForegroundColor Cyan
+# Resolve venv python (../.venv/Scripts/python.exe)
+$venvPy = Join-Path $ScriptDir "..\.venv\Scripts\python.exe"
+if (-not (Test-Path $venvPy)) {
+	Write-Warning "Virtual env Python not found at $venvPy. Falling back to system 'python'."
+	$venvPy = "python"
 }
-Write-Host "`n⚠️  Accept the security warning when prompted" -ForegroundColor Yellow
-Write-Host "============================================================`n" -ForegroundColor Cyan
 
-# Run the HTTPS server
-& "C:/Users/abhi1/OneDrive/Desktop/women-safety/.venv/Scripts/python.exe" run_https.py
+# Ensure cert/key exist
+$certPath = Join-Path $ScriptDir 'cert.pem'
+$keyPath = Join-Path $ScriptDir 'key.pem'
+if (-not (Test-Path $certPath) -or -not (Test-Path $keyPath)) {
+	Write-Error "Missing cert.pem/key.pem in $ScriptDir. Generate them first."
+	exit 1
+}
+
+$env:USE_HTTPS = '1'
+$env:HTTPS_PORT = "$Port"
+
+Write-Host "Starting server on https://127.0.0.1:$Port ..." -ForegroundColor Green
+Write-Host "Press Ctrl+C to stop." -ForegroundColor DarkGray
+
+# Optionally open the browser after a short delay
+if ($Open) {
+	Start-Job -ScriptBlock {
+		param($p)
+		Start-Sleep -Seconds 2
+		Start-Process "https://127.0.0.1:$p"
+	} -ArgumentList $Port | Out-Null
+}
+
+# Run the app with HTTPS flags to avoid env parsing issues in some shells
+& $venvPy "app.py" "--https" "--https-port" "$Port"
