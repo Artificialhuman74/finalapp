@@ -1,0 +1,40 @@
+##############################
+# Global
+##############################
+.DS_Store
+Thumbs.db
+*.pyc
+__pycache__/
+.vscode/
+.idea/
+.venv/
+env/
+venv/
+node_modules/
+package-lock.json
+
+##############################
+# Python app (women-safety-app)
+##############################
+# Environment and certs
+women-safety-app/.env
+*.pem
+
+# Local SQLite db and instance data
+women-safety-app/instance/
+
+# Uploads and logs (generated at runtime)
+women-safety-app/app/uploads/
+
+# SOS logs/recordings (JSON + media)
+women-safety-app/app/uploads/sos/logs/
+women-safety-app/app/uploads/sos/recordings/
+
+# Caches
+women-safety-app/app/__pycache__/
+
+##############################
+# Temporary archives
+##############################
+temp-archive-full/
+__MACOSX/

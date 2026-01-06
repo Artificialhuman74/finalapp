@@ -1,0 +1,437 @@
+{% extends 'base.html' %}
+
+{% block title %}SOS Center - Sylvie{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/sylvie-neumorphic.css') }}">
+<style>
+  /* SOS-specific Sylvie overrides */
+  body {
+    background: linear-gradient(180deg, #FDF9F4 0%, #FFFFFF 100%);
+  }
+
+  .sos-hero {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .sos-btn-lg {
+    padding: 1.25rem 2rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(176, 20, 58, 0.3);
+  }
+
+  .sos-btn-lg:hover {
+    box-shadow: 0 12px 32px rgba(176, 20, 58, 0.4);
+    transform: translateY(-3px);
+  }
+
+  .status-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  /* Countdown Overlay */
+  .countdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, rgba(176, 20, 58, 0.95), rgba(139, 0, 0, 0.98));
+    animation: pulse 1s infinite;
+  }
+
+  .countdown-overlay.active {
+    display: flex;
+  }
+
+  @keyframes pulse {
+
+    0%,
+    100% {
+      background: radial-gradient(circle at center, rgba(176, 20, 58, 0.95), rgba(139, 0, 0, 0.98));
+    }
+
+    50% {
+      background: radial-gradient(circle at center, rgba(255, 50, 50, 0.98), rgba(160, 0, 0, 1));
+    }
+  }
+
+  .countdown-content {
+    text-align: center;
+    color: white;
+  }
+
+  .countdown-number {
+    font-size: 180px;
+    font-weight: 900;
+    line-height: 1;
+    text-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .countdown-text {
+    font-size: 32px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 30px;
+  }
+
+  .countdown-warning {
+    font-size: 20px;
+    opacity: 0.9;
+    margin-bottom: 40px;
+  }
+
+  /* Slide to Cancel */
+  .slide-to-cancel-container {
+    width: 350px;
+    height: 70px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 3px solid white;
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+  }
+
+  .slide-to-cancel-track {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.4);
+    width: 0%;
+    transition: width 0.1s ease;
+    border-radius: 50px;
+  }
+
+  .slide-to-cancel-thumb {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: left 0.1s ease;
+    cursor: grab;
+  }
+
+  .slide-to-cancel-text {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    pointer-events: none;
+    letter-spacing: 1px;
+  }
+
+  .recording-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--sylvie-berry-red);
+    animation: blink 1s infinite;
+    display: inline-block;
+  }
+
+  @keyframes blink {
+
+    0%,
+    50% {
+      opacity: 1;
+    }
+
+    51%,
+    100% {
+      opacity: 0.3;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<body class="sylvie-theme">
+  <!-- Floating Elements -->
+  <div class="sylvie-floating-elements">
+    <svg class="sylvie-float" width="40" height="40" viewBox="0 0 100 100"
+      style="top: 15%; right: 10%; animation: sylvieFloat1 6s ease-in-out infinite;">
+      <path
+        d="M50 25 C35 25, 25 35, 25 50 C25 65, 35 75, 50 75 C65 75, 75 65, 75 50 C75 35, 65 25, 50 25 Z M50 40 C45 40, 40 45, 40 50 C40 55, 45 60, 50 60 C55 60, 60 55, 60 50 C60 45, 55 40, 50 40 Z"
+        fill="#FFB6C1" stroke="#FFB6C1" stroke-width="2" />
+    </svg>
+    <svg class="sylvie-float" width="35" height="35" viewBox="0 0 100 100"
+      style="top: 50%; left: 5%; animation: sylvieFloat2 5s ease-in-out infinite;">
+      <path d="M50 20 L60 45 L85 50 L60 55 L50 80 L40 55 L15 50 L40 45 Z" fill="#E6B5C7" stroke="#E6B5C7"
+        stroke-width="2" />
+    </svg>
+  </div>
+
+  <!-- Countdown Overlay -->
+  <div class="countdown-overlay" id="countdownOverlay">
+    <div class="countdown-content">
+      <div class="countdown-number" id="countdownNumber">5</div>
+      <div class="countdown-text">Emergency SOS Activating</div>
+      <div class="countdown-warning">
+        🚨 Your emergency contacts will be alerted 🚨
+      </div>
+      <div class="slide-to-cancel-container" id="slideContainer">
+        <div class="slide-to-cancel-track" id="slideTrack"></div>
+        <div class="slide-to-cancel-thumb" id="slideThumb">➜</div>
+        <div class="slide-to-cancel-text">Slide to Cancel</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sylvie-container">
+    <!-- Hero Section -->
+    <div class="sos-hero text-center">
+      <h1 class="sylvie-title sylvie-title-lg">Emergency SOS Center</h1>
+      <p class="sylvie-subtitle">Get immediate help. Trigger SOS, auto-record, and share your location with trusted
+        contacts.</p>
+    </div>
+
+    <!-- Main SOS Card -->
+    <div class="sylvie-card sylvie-card-compact">
+      <h3 class="sylvie-title sylvie-title-md">Quick SOS</h3>
+      <p class="sylvie-subtitle mb-3">Press SOS to start a 5-second countdown. We'll notify your emergency contacts and
+        log your location.</p>
+
+      <div class="d-grid gap-2 mb-3">
+        <button id="sosBtn" class="sylvie-btn sylvie-btn-primary sos-btn-lg">
+          🚨 Start SOS
+        </button>
+        <button id="stopBtn" class="sylvie-btn sylvie-btn-secondary d-none">
+          ⛔ Stop & Upload
+        </button>
+      </div>
+
+      <div id="status" class="sylvie-alert sylvie-alert-info">
+        Ready to activate SOS.
+      </div>
+    </div>
+
+    <!-- Location & Status Cards -->
+    <div class="row g-3 mt-3">
+      <div class="col-md-6">
+        <div class="sylvie-card sylvie-card-compact">
+          <h5 class="sylvie-title">Live Location</h5>
+          <div id="locStatus" class="sylvie-subtitle">Location permission will be requested on SOS.</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="sylvie-card sylvie-card-compact">
+          <h5 class="sylvie-title">Recent Upload</h5>
+          <div id="uploadStatus" class="sylvie-subtitle">None yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="sylvie-card sylvie-card-compact mt-3">
+      <div class="d-flex gap-2 flex-wrap justify-content-center">
+        <a href="{{ url_for('main.sos_deactivate_page') }}" class="sylvie-btn sylvie-btn-success">Mark as Safe</a>
+        <a href="tel:181" class="sylvie-btn sylvie-btn-secondary">Call 181</a>
+        <a href="{{ url_for('main.emergency_contacts') }}" class="sylvie-btn sylvie-btn-secondary">Manage Contacts</a>
+      </div>
+    </div>
+  </div>
+
+  <video id="preview" playsinline muted
+    style="display: none; width: 100%; border-radius: 16px; margin-top: 1rem;"></video>
+</body>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  // Simplified SOS functionality with Sylvie aesthetics
+  (() => {
+    const sosBtn = document.getElementById('sosBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const status = document.getElementById('status');
+    const locStatus = document.getElementById('locStatus');
+    const uploadStatus = document.getElementById('uploadStatus');
+    const preview = document.getElementById('preview');
+    const overlay = document.getElementById('countdownOverlay');
+    const numberEl = document.getElementById('countdownNumber');
+    const slideContainer = document.getElementById('slideContainer');
+    const slideThumb = document.getElementById('slideThumb');
+    const slideTrack = document.getElementById('slideTrack');
+
+    let mediaStream = null;
+    let recorder = null;
+    let chunks = [];
+    let sosId = null;
+    let locTimer = null;
+    let startedAt;
+    let countdownCancelled = false;
+    let sosFlowBusy = false;
+    let isDragging = false;
+    let startX = 0;
+    const maxSlide = 280;
+
+    function log(msg) {
+      status.innerHTML = msg;
+      status.className = 'sylvie-alert sylvie-alert-info';
+    }
+
+    function logSuccess(msg) {
+      status.innerHTML = msg;
+      status.className = 'sylvie-alert sylvie-alert-success';
+    }
+
+    function logDanger(msg) {
+      status.innerHTML = msg;
+      status.className = 'sylvie-alert sylvie-alert-danger';
+    }
+
+    // Slide to cancel functionality
+    function resetSlider() {
+      slideThumb.style.left = '5px';
+      slideTrack.style.width = '0%';
+      isDragging = false;
+    }
+
+    function handleSlideStart(e) {
+      isDragging = true;
+      startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+    }
+
+    function handleSlideMove(e) {
+      if (!isDragging) return;
+      e.preventDefault();
+      const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+      const deltaX = clientX - startX;
+      const currentX = Math.max(0, Math.min(deltaX, maxSlide));
+
+      slideThumb.style.left = (5 + currentX) + 'px';
+      const percentage = (currentX / maxSlide) * 100;
+      slideTrack.style.width = percentage + '%';
+
+      if (percentage >= 80) {
+        countdownCancelled = true;
+        isDragging = false;
+        slideThumb.textContent = '✓';
+      }
+    }
+
+    function handleSlideEnd() {
+      if (!countdownCancelled) {
+        resetSlider();
+      }
+      isDragging = false;
+    }
+
+    slideThumb.addEventListener('mousedown', handleSlideStart);
+    slideThumb.addEventListener('touchstart', handleSlideStart, { passive: false });
+    document.addEventListener('mousemove', handleSlideMove);
+    document.addEventListener('touchmove', handleSlideMove, { passive: false });
+    document.addEventListener('mouseup', handleSlideEnd);
+    document.addEventListener('touchend', handleSlideEnd);
+
+    async function beginSOS() {
+      if (sosFlowBusy) return;
+      sosFlowBusy = true;
+
+      // Check emergency contacts
+      try {
+        const contactsResp = await fetch('/api/emergency-contacts');
+        const contactsData = await contactsResp.json();
+        if (!contactsData.contacts || contactsData.contacts.length < 3) {
+          logDanger('⚠️ Please add at least 3 emergency contacts first!');
+          setTimeout(() => {
+            window.location.href = '/emergency-contacts';
+          }, 2000);
+          return;
+        }
+      } catch (e) {
+        console.error('Failed to check contacts:', e);
+      }
+
+      // Show countdown
+      overlay.classList.add('active');
+      countdownCancelled = false;
+      resetSlider();
+      slideThumb.textContent = '➜';
+
+      // Countdown from 5 to 1
+      for (let i = 5; i >= 1; i--) {
+        if (countdownCancelled) {
+          overlay.classList.remove('active');
+          log('SOS cancelled.');
+          sosFlowBusy = false;
+          return;
+        }
+        numberEl.textContent = i;
+        await new Promise(r => setTimeout(r, 1000));
+      }
+
+      overlay.classList.remove('active');
+      logSuccess('🚨 SOS ACTIVATED! Notifying your emergency contacts...');
+
+      // Get location
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          pos => {
+            locStatus.textContent = `Location: ${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`;
+          },
+          err => {
+            locStatus.textContent = 'Location error: ' + err.message;
+          }
+        );
+      }
+
+      // Log SOS event
+      const resp = await fetch('/api/sos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user: 'User',
+          time: new Date().toISOString(),
+          triggeredBy: 'Button'
+        })
+      });
+      const data = await resp.json();
+      sosId = data.sosId || Date.now();
+
+      sosBtn.classList.add('d-none');
+      stopBtn.classList.remove('d-none');
+    }
+
+    function stopSOS() {
+      log('SOS ended.');
+      uploadStatus.textContent = 'Session ended.';
+      stopBtn.classList.add('d-none');
+      sosBtn.classList.remove('d-none');
+      sosFlowBusy = false;
+    }
+
+    sosBtn.addEventListener('click', beginSOS);
+    stopBtn.addEventListener('click', stopSOS);
+  })();
+</script>
+{% endblock %}

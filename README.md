@@ -1,23 +1,15 @@
-# 🛡️ SafeGuard – Women's Safety & Support Hub
+# 🏦 Gringotts – Women's Safety & Support Hub
 
-**SafeGuard** is a comprehensive, AI-powered mobile safety application with an intuitive onboarding experience, instant SOS alerts, safe route planning, incident reporting, AI-powered fake call features, and anonymous community support. It runs on Flask with HTTPS to enable secure browser permissions (location, microphone, camera, notifications).
+**Gringotts** is a comprehensive Flask-based safety application with AI assistance, safe route planning, instant SOS alerts, incident reporting, and an anonymous community support wall. It runs locally with HTTPS to enable secure browser permissions (location, microphone, camera, notifications).
 
 ## ✨ Key Features
 
-### 🎯 **Beautiful Onboarding Experience**
-- Step-by-step interactive slides showcasing all features
-- Permission requests integrated into each feature preview
-- Smooth animations and transitions
-- Skip option for returning users
-- Progress tracking with visual indicators
-
-### 🚨 **SOS Emergency Alert**
+### 🚨 **SOS Center**
 - One-tap emergency alerts with live GPS tracking
 - Automatic SMS notifications to emergency contacts
 - WhatsApp alert integration with tracking links
 - Voice/video recording during emergencies
 - Real-time location broadcasting every 60 seconds
-- Reliability badge showing alert delivery status
 
 ### 🗺️ **Safe Routes**
 - AI-powered route optimization based on:
@@ -26,7 +18,6 @@
   - Population density (187 data points)
 - Interactive map with safety scores
 - Multiple route options with detailed metrics
-- Real-time navigation guidance
 
 ### 📝 **Incident Reporting**
 - Step-by-step guided questionnaire
@@ -35,64 +26,64 @@
 - Anonymous or identified reporting options
 - Export reports for official documentation
 
-### 🎭 **AI Fake Call**
-- AI-powered conversational fake calls (Gemini)
-- Voice recognition for natural responses
-- Escape dangerous situations discreetly
-- Customizable caller names
-- Sound effects and realistic conversation
-
 ### 🤝 **Community Support**
 - Anonymous story sharing
 - Peer support with reactions and comments
 - AI-powered emotional support chat
 - Safe space for sharing experiences
-- Real-time chat with community members
+
+### 🎭 **Fake Call Feature**
+- AI-powered conversational fake calls (Gemini)
+- Voice recognition for natural responses
+- Escape dangerous situations discreetly
+- Customizable caller names
 
 ### 🔐 **Privacy & Security**
 - HTTPS encryption (self-signed certificate for local dev)
 - Anonymous posting options
 - Secure data storage
 - No personal data exposure without consent
-- End-to-end permission controls
 
 ---
 
-## 🚀 Quick Start Guide (Mac/Linux)
+## 🚀 Quick Start Guide (Windows)
 
 ### Step 1: Clone the Repository
-```bash
+```powershell
+# Clone from GitHub
 git clone https://github.com/BuiltbyVrunda/dreamflow.git
-cd dreamflow/women-safety-app
+cd dreamflow\women-safety-app
 ```
 
 ### Step 2: Create Virtual Environment
-```bash
+```powershell
 # Create a new virtual environment
-python3 -m venv venv
+python -m venv .venv
 
 # Activate the virtual environment
-source venv/bin/activate
+& .\.venv\Scripts\Activate.ps1
 
 # Upgrade pip
 python -m pip install --upgrade pip
 ```
 
 ### Step 3: Install Dependencies
-```bash
+```powershell
 # Install all required packages
 pip install -r requirements.txt
 ```
 
-### Step 4: Frontend Setup
-```bash
-cd frontend
-npm install
-npm run build
-cd ..
-```
+**Required packages will be installed:**
+- Flask (web framework)
+- Flask-SQLAlchemy (database ORM)
+- Flask-CORS (cross-origin requests)
+- pandas & numpy (data analysis for safe routes)
+- requests (API calls to Gemini, SMS providers)
+- python-dotenv (environment variable management)
+- werkzeug (file uploads & security)
+- gevent (HTTPS server support)
 
-### Step 5: Configure Environment Variables
+### Step 4: Configure Environment Variables
 Create a file named `.env` in the `women-safety-app` folder:
 
 ```env
@@ -101,8 +92,11 @@ GEMINI_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-2.0-flash
 GEMINI_API_VERSION=v1
 
-# ===== OPTIONAL: SMS Providers =====
+# ===== OPTIONAL: SMS Providers (for automatic SOS alerts) =====
+# Fast2SMS (Indian SMS service - requires 10-digit numbers)
 FAST2SMS_API_KEY=your_fast2sms_key_here
+
+# OR Twilio (International SMS - requires E.164 format: +919876543210)
 TWILIO_ACCOUNT_SID=ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 TWILIO_AUTH_TOKEN=your_twilio_auth_token_here
 
@@ -110,30 +104,59 @@ TWILIO_AUTH_TOKEN=your_twilio_auth_token_here
 SECRET_KEY=change-this-to-a-random-secret-key-in-production
 ```
 
+**🔑 Get Your Gemini API Key:**
+1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Sign in with your Google account
+3. Click "Create API Key"
+4. Copy the key and paste it in `.env`
+
+### Step 5: Generate SSL Certificate (First Time Only)
+The app needs HTTPS for browser permissions. Generate a self-signed certificate:
+
+```powershell
+# The cert.pem and key.pem files should already be in the repo
+# If missing, you can generate them:
+# pip install pyopenssl
+# python -c "from OpenSSL import crypto; k = crypto.PKey(); k.generate_key(crypto.TYPE_RSA, 2048); c = crypto.X509(); c.get_subject().CN = 'localhost'; c.set_serial_number(1000); c.gmtime_adj_notBefore(0); c.gmtime_adj_notAfter(365*24*60*60); c.set_issuer(c.get_subject()); c.set_pubkey(k); c.sign(k, 'sha256'); open('cert.pem', 'wb').write(crypto.dump_certificate(crypto.FILETYPE_PEM, c)); open('key.pem', 'wb').write(crypto.dump_privatekey(crypto.FILETYPE_PEM, k))"
+```
+
 ### Step 6: Start the Server
-```bash
+```powershell
 # Make sure virtual environment is activated
-source venv/bin/activate
+& .\.venv\Scripts\Activate.ps1
 
 # Start HTTPS server on port 5443
-python app.py
+python app.py --https --https-port 5443
 ```
 
 You should see:
 ```
 ============================================================
-🚀 Women's Safety App - FULL APPLICATION (HTTPS)
+🚀 Women's Safety App - FULL APPLICATION
 ============================================================
-🔒 Running on HTTPS with self-signed certificate
-   https://127.0.0.1:5443
-   https://192.168.0.3:5443
+📊 Crime data: 260 records
+💡 Lighting data: 1144 points
+👥 Population data: 187 points
+...
+🔐 Starting HTTPS server
+   URL        : https://127.0.0.1:5443
 ```
 
 ### Step 7: Open in Browser
-1. Visit: **https://127.0.0.1:5443**
-2. Accept the security warning (self-signed certificate)
-3. You'll see the beautiful onboarding experience
-4. Grant permissions for full functionality
+1. Open your browser and go to: **https://127.0.0.1:5443**
+2. You'll see a security warning (normal for self-signed certificates)
+3. Click "Advanced" → "Proceed to 127.0.0.1 (unsafe)" or similar
+4. The onboarding screen will appear requesting permissions
+5. Grant permissions for full functionality
+
+### Step 8: Test the Application
+```powershell
+# Check server health
+curl.exe -k https://127.0.0.1:5443/api/health
+
+# Check Gemini AI status
+curl.exe -k https://127.0.0.1:5443/api/ai-status
+```
 
 ---
 
@@ -141,231 +164,160 @@ You should see:
 
 To test on your phone (same WiFi network):
 
-1. Find your Mac/Linux IP address:
-```bash
-ifconfig | grep "inet " | grep -v 127.0.0.1
-# Look for IPv4 address (e.g., 192.168.0.3)
+1. Find your PC's IP address:
+```powershell
+ipconfig
+# Look for "IPv4 Address" under your active network adapter
+# Example: 192.168.1.100
 ```
 
 2. On your phone, visit: `https://YOUR_IP:5443`
-   - Example: `https://192.168.0.3:5443`
+   - Example: `https://192.168.1.100:5443`
 
 3. Accept the certificate warning on mobile browser
 
-4. Complete the beautiful onboarding flow
-
-5. Grant permissions for all features
-
-## Tech Stack
-
-**Backend:**
-- Flask (Python web framework)
-- SQLAlchemy (Database ORM)
-- Google Gemini AI (AI responses & summarization)
-- Pandas/NumPy (Route analysis & data processing)
-
-**Frontend:**
-- React 19 with TypeScript
-- Framer Motion (Animations)
-- GSAP (Advanced animations)
-- Leaflet Maps (Route visualization)
-- TailwindCSS (Styling)
+4. Grant permissions when the onboarding modal appears
 
 ## Project Structure
 
 ```
 women-safety-app/
 ├── app/
-│   ├── __init__.py              # Flask app factory
-│   ├── routes.py                # API routes
-│   ├── models.py                # Database models
-│   ├── auth_models.py           # Authentication models
-│   ├── route_optimizer.py       # Safe route algorithm
-│   ├── data/                    # Crime, lighting, population data
-│   ├── ml/                      # Machine learning models
-│   ├── safety/                  # Safety guardrails
-│   ├── templates/               # HTML templates
-│   ├── static/                  # CSS, JS, images
-│   │   ├── css/                 # Stylesheets
-│   │   ├── js/                  # JavaScript files
-│   │   └── images/              # App images
-│   └── uploads/                 # User uploads (evidence, SOS)
-├── frontend/                    # React TypeScript frontend
-│   ├── src/
-│   │   ├── components/          # React components
-│   │   │   ├── IntroOnboarding.tsx    # Beautiful onboarding
-│   │   │   ├── Landing.tsx            # Main dashboard
-│   │   │   ├── SOSCenter.tsx          # SOS emergency
-│   │   │   ├── SafeRoutesApp.tsx      # Route planner
-│   │   │   ├── IncidentReport.tsx     # Report form
-│   │   │   ├── FakeCall.tsx           # AI fake call
-│   │   │   └── CommunitySupport.tsx   # Community chat
-│   │   ├── styles/              # Stylesheets
-│   │   └── App.tsx              # Main app component
-│   ├── public/                  # Static assets
-│   └── package.json             # NPM dependencies
-├── app.py                       # Application entry point
-├── config.py                    # Configuration
-└── requirements.txt             # Python dependencies
+│   ├── __init__.py          # Flask app factory
+│   ├── routes.py            # All routes (SOS, Chat, Safe Routes, etc.)
+│   ├── templates/
+│   │   ├── base.html
+│   │   ├── incident_report.html
+│   │   ├── report_summary.html
+│   │   └── community_support.html
+│   ├── static/
+│   │   ├── css/style.css
+│   │   └── js/dynamic_form.js
+│   └── uploads/evidence/    # File upload directory
+├── app.py                   # Application entry point
+├── config.py                # Configuration
+└── requirements.txt         # Python dependencies
 ```
 
 ## Usage Guide
 
-### 1. First-Time Onboarding
-1. Visit `https://127.0.0.1:5443` 
-2. Swipe through 6 beautiful feature slides
-3. Grant permissions for each feature:
-   - Location (for SOS & Safe Routes)
-   - Notifications (for SOS alerts)
-   - Microphone (for Fake Call feature)
-   - Camera (for Incident Reports)
-4. Click "Get Started" to proceed
-
-### 2. Create Account & Login
-- Sign up with email/password
-- Use credentials to log in
-- Access main dashboard with dock navigation
-
-### 3. File an Incident Report
-1. Tap "Incident Report" on dock
-2. Answer guided questionnaire:
+### 1. File an Incident Report
+1. Visit http://127.0.0.1:5000
+2. Answer the multi-step questionnaire:
    - Who was involved?
    - What type of incident?
    - Where did it happen?
-   - Impact assessment
-   - Date/time details
-3. Upload evidence (photos, video, audio, documents)
-4. AI generates professional summary
-5. Option to post anonymously to community
+   - Impact on you
+   - Date and time
+   - First occurrence?
+3. Optionally upload evidence files
+4. Click "Generate Report"
 
-### 4. SOS Emergency Alert
-1. Tap the red SOS button on dock
-2. Confirm emergency activation
-3. App automatically:
-   - Captures live GPS location
-   - Records video/audio (optional)
-   - Sends SMS to emergency contacts
-   - Broadcasts WhatsApp alerts with tracking link
-   - Updates location every 60 seconds
+### 2. AI Summary & Chat
+- The Gemini AI will create a professional summary
+- Takes 5-10 seconds to generate
+- Summary is empathetic and factual
+- Chat: visit /support-chat or start AI Fake Call at /fake-call
 
-### 5. Plan Safe Routes
-1. Tap "Safe Routes" on dock
-2. Enter starting point and destination
-3. View multiple route options with:
-   - Crime density scores
-   - Lighting coverage percentage
-   - Population density info
-   - Safety rating per route
-4. Tap to navigate with turn-by-turn directions
+### 3. Share Anonymously (Optional)
+- Post your summary to the community wall
+- Remain completely anonymous
+- Receive support from others
 
-### 6. Use AI Fake Call
-1. Tap "Fake Call" feature
-2. Choose caller name or use default
-3. AI generates realistic conversation
-4. Speak naturally - AI responds in real-time
-5. Tap to end call when safe
+### 4. Community Wall
+- View other anonymous stories
+- Send support with hearts ❤️
+- Add supportive comments
+- All interactions are anonymous
 
-### 7. Community Support
-1. Tap "Community Support" on dock
-2. Read anonymous stories from others
-3. Post your own story anonymously
-4. Send hearts ❤️ as support
-5. Comment supportively on others' posts
-6. Chat with AI for emotional support
+## API Configuration
+
+Gemini configuration is read from environment variables via `.env` (no keys in code). See Quick Start step 2.
+
+## Security Notes
+
+⚠️ **For Production Deployment:**
+1. Move API key to environment variables
+2. Use HTTPS
+3. Add rate limiting
+4. Implement proper database storage
+5. Add user authentication (if needed)
+6. Change SECRET_KEY in config
 
 ## Troubleshooting
 
-### Port Already in Use
-```bash
-# Kill process on port 5443
-lsof -i :5443 | grep LISTEN | awk '{print $2}' | xargs kill -9
+### Server Won't Start
+```powershell
+# Common fixes
+# 1) Ensure venv is activated and deps are installed
+& .\.venv\Scripts\Activate.ps1; pip install -r requirements.txt
+
+# 2) If port 5443 in use, kill previous Python processes
+Get-Process -Name python -ErrorAction SilentlyContinue | Stop-Process
 ```
 
 ### Gemini API Errors
-- Verify `GEMINI_API_KEY` is valid
-- Check `.env` file in `women-safety-app` folder
-- Ensure model is `gemini-2.0-flash`
+- Verify GEMINI_API_KEY is set and valid
+- Ensure `.env` is in the `women-safety-app` folder
+- Confirm model/version: `GEMINI_MODEL=gemini-2.0-flash`, `GEMINI_API_VERSION=v1`
 
-### Frontend Build Issues
-```bash
-cd frontend
-rm -rf node_modules
-npm install
-npm run build
+### File Upload Issues
+- Ensure `app/uploads/evidence/` directory exists
+- Check file size (max 16MB)
+- Allowed formats: png, jpg, jpeg, gif, mp3, wav, m4a, mp4, mov, pdf
+
+## Stop the Server
+
+Press `Ctrl+C` in the terminal running the Flask app.
+
+## Next Steps
+
+- [ ] Add database integration (SQLite/PostgreSQL)
+- [ ] Implement persistent storage for posts
+- [ ] Add export to PDF feature
+- [ ] Implement search/filter on community wall
+- [ ] Add email notifications (optional)
+- [ ] Deploy to cloud platform
+
+## SOS Alerts (SMS + WhatsApp)
+
+The SOS Center can notify your emergency contacts immediately:
+
+- WhatsApp: On SOS activation, a modal opens with a Share button (choose multiple recipients) and per-contact WhatsApp buttons. This requires you to tap to send (WhatsApp does not allow fully automatic sending without the Business API).
+- SMS: The server can send real SMS automatically using Fast2SMS or Twilio if configured. If not configured, it logs a mock send to `app/uploads/sos/logs/sms_log.json`.
+
+Enable real SMS via Twilio (Windows PowerShell):
+
+```powershell
+$env:TWILIO_ACCOUNT_SID = "ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+$env:TWILIO_AUTH_TOKEN = "your_auth_token"
+$env:TWILIO_FROM_NUMBER = "+1XXXXXXXXXX"  # Your Twilio SMS-enabled number in E.164 format
 ```
 
-### Certificate Warnings
-- Accept security warning on first visit
-- Clear browser cache if issues persist
-- Certificate is self-signed for local development
+Then install dependencies and run the app:
 
-## Environment Setup
+```powershell
+cd women-safety-app
+python -m pip install -r requirements.txt
+python app.py
+```
 
-**Get Your Gemini API Key:**
-1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Sign in with Google account
-3. Click "Create API Key"
-4. Copy to `.env` file
+Notes:
+- For Twilio, store contact numbers in E.164 (e.g., +9198XXXXXXXX). For Fast2SMS, store 10-digit Indian numbers.
+- If provider calls fail, the app still logs the message and shows it in the console and `sms_log.json` so you can send manually.
+- WhatsApp Business Cloud API requires Facebook Business verification and approved templates; not enabled by default in this project.
 
-**Optional: SMS Configuration**
-- **Twilio**: Requires international number (+country code)
-- **Fast2SMS**: Requires 10-digit Indian number
+## Support Resources (Placeholder)
 
-## Performance Optimizations
-
-✨ The app includes:
-- Hardware-accelerated CSS animations
-- Optimized React rendering with memo
-- Lazy loading for route maps
-- Image optimization
-- Service worker for offline support (coming soon)
-- Database indexing for fast queries
-
-## Security Features
-
-🔒 Built with security first:
-- HTTPS encryption (self-signed for local dev)
-- CSRF protection on all forms
-- Input validation & sanitization
-- SQL injection prevention (SQLAlchemy ORM)
-- Rate limiting on sensitive endpoints
-- Anonymous posting without user tracking
-- Secure file upload validation
-
-## Future Roadmap
-
-- [ ] Real-time SOS tracking for family members
-- [ ] Integration with local police databases
-- [ ] ML-powered incident prediction
-- [ ] Video call feature for SOS
-- [ ] Offline incident reporting
-- [ ] Push notification support
-- [ ] Emergency contact geo-mapping
-- [ ] Community event alerts
-- [ ] Cloud database sync
-
-## Support Resources
-
-For more information:
-- GitHub: [buildbychiranth/dreamflow](https://github.com/Artificialhuman74/buildbychiranth)
-- Documentation: See individual README files in folders
-- Issues: Submit via GitHub Issues
-
-## License
-
-MIT License - Free to use and modify
-
-## Authors
-
-**Built with ❤️ for safety and community support**
-
-- Frontend: React + TypeScript
-- Backend: Flask + Python
-- AI: Google Gemini
-- Maps: Leaflet
-- Data: Crime records, lighting coverage, population density
+- National Helpline: 123-456
+- Local Support Center: 987-654
+- Emergency Services: 112
 
 ---
 
-**Last Updated:** January 4, 2026
-**Version:** 2.0 (React Frontend + Beautiful Onboarding)
+**Built with:** Flask, Bootstrap, Leaflet, Gemini AI
+**License:** MIT
+**Last Updated:** November 2, 2025
+
+
+

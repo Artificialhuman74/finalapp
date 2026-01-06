@@ -1,0 +1,34 @@
+﻿/* PREMIUM DARK E-COMMERCE UI - Complete Override */
+* {margin: 0; padding: 0; box-sizing: border-box;}
+:root {--bg-black: #000; --bg-dark: #0d0d0d; --bg-card: #1a1a1a; --bg-elevated: #242424; --accent-rose: #ff6b9d; --text-white: #fff; --text-gray: #999; --text-dim: #666; --border: #2a2a2a;}
+body {background: var(--bg-black) !important; color: var(--text-white) !important; font-family: 'Segoe UI', system-ui, sans-serif !important;}
+.navbar {background: rgba(13, 13, 13, 0.98) !important; backdrop-filter: blur(20px); border-bottom: 1px solid var(--border) !important; padding: 1.2rem 0 !important;}
+.navbar-brand {font-size: 1.5rem !important; font-weight: 700 !important; color: var(--text-white) !important; letter-spacing: 1px;}
+.navbar-nav .nav-link {color: var(--text-gray) !important; padding: 0.6rem 1.2rem !important; margin: 0 0.3rem !important; border-radius: 8px !important; transition: all 0.3s !important;}
+.navbar-nav .nav-link:hover {color: var(--text-white) !important; background: var(--bg-elevated) !important;}
+.card {background: var(--bg-card) !important; border: 1px solid var(--border) !important; border-radius: 16px !important; transition: transform 0.3s, box-shadow 0.3s !important;}
+.card:hover {transform: translateY(-5px); box-shadow: 0 20px 60px rgba(0,0,0,0.8) !important;}
+.card-header {background: var(--bg-dark) !important; border-bottom: 1px solid var(--border) !important; padding: 1.5rem !important; font-weight: 600 !important;}
+.card-body {padding: 2rem !important; background: var(--bg-card) !important;}
+.btn {border-radius: 10px !important; padding: 0.8rem 2rem !important; font-weight: 600 !important; border: none !important; transition: all 0.3s !important;}
+.btn-primary {background: linear-gradient(135deg, #ff6b9d, #ff8fab) !important; color: white !important; box-shadow: 0 8px 20px rgba(255,107,157,0.4) !important;}
+.btn-primary:hover {background: linear-gradient(135deg, #ff8fab, #ffadc1) !important; transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255,107,157,0.6) !important;}
+.form-control, .form-select {background: var(--bg-elevated) !important; border: 1px solid var(--border) !important; border-radius: 10px !important; padding: 0.8rem 1rem !important; color: var(--text-white) !important;}
+.form-control:focus {background: var(--bg-card) !important; border-color: var(--accent-rose) !important; box-shadow: 0 0 0 3px rgba(255,107,157,0.1) !important; color: var(--text-white) !important;}
+.form-control::placeholder {color: var(--text-dim) !important;}
+.hero-section {background: var(--bg-black) !important; padding: 6rem 0 4rem !important;}
+.hero-section h1 {font-size: 4rem !important; font-weight: 800 !important; background: linear-gradient(135deg, #fff, #ccc); -webkit-background-clip: text !important; -webkit-text-fill-color: transparent !important;}
+.feature-card {background: var(--bg-card) !important; border: 1px solid var(--border) !important; border-radius: 20px !important; padding: 2.5rem 1.5rem !important; transition: all 0.4s !important; cursor: pointer;}
+.feature-card:hover {transform: translateY(-10px) scale(1.02); box-shadow: 0 20px 60px rgba(255,107,157,0.25);}
+.icon-wrapper {width: 90px; height: 90px; margin: 0 auto 1.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, rgba(255,107,157,0.15), rgba(255,107,157,0.05));}
+.icon-wrapper svg {color: var(--accent-rose);}
+.feature-card h4 {font-size: 1.3rem !important; font-weight: 700 !important; color: var(--text-white) !important;}
+.list-group-item {background: var(--bg-card) !important; border: 1px solid var(--border) !important; color: var(--text-white) !important; border-radius: 10px !important;}
+.modal-content {background: var(--bg-dark) !important; border: 1px solid var(--border) !important; border-radius: 16px !important;}
+.btn-close {filter: invert(1) grayscale(100%) brightness(200%);}
+h1,h2,h3,h4,h5,h6 {color: var(--text-white) !important;}
+.table {color: var(--text-white) !important;}
+.table thead th {background: var(--bg-dark) !important; border-color: var(--border) !important;}
+::-webkit-scrollbar {width: 10px;}
+::-webkit-scrollbar-track {background: var(--bg-black);}
+::-webkit-scrollbar-thumb {background: var(--bg-elevated); border-radius: 5px;}

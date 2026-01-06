@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brew - Welcome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #F9DDE2 0%, #FBEFF6 50%, #FFF8F4 100%);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Intro Container */
+        .intro-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: all 1.5s cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        .intro-container.zoom-in {
+            transform: scale(20);
+            opacity: 0;
+        }
+
+        /* Central Circle */
+        .intro-circle {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #F7CACA 0%, #F9DDE2 50%, #FBEFF6 100%);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+            box-shadow: 
+                0 20px 60px rgba(249, 221, 226, 0.4),
+                0 0 0 20px rgba(255, 255, 255, 0.1),
+                0 0 0 40px rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-circle::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .intro-circle:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 30px 80px rgba(249, 221, 226, 0.5),
+                0 0 0 20px rgba(255, 255, 255, 0.2),
+                0 0 0 40px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Logo/Text inside circle */
+        .intro-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .intro-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 5rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .intro-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+
+        .intro-hint {
+            position: absolute;
+            bottom: 80px;
+            font-size: 0.9rem;
+            color: rgba(0, 0, 0, 0.5);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Floating elements */
+        .floating-element {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.2;
+            animation: floatAround 20s ease-in-out infinite;
+        }
+
+        @keyframes floatAround {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, -100px) rotate(90deg); }
+            50% { transform: translate(200px, 0) rotate(180deg); }
+            75% { transform: translate(100px, 100px) rotate(270deg); }
+        }
+
+        .floating-element:nth-child(1) {
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 20%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 15%;
+            left: 15%;
+            animation-delay: 4s;
+        }
+
+        .floating-element:nth-child(4) {
+            bottom: 10%;
+            right: 10%;
+            animation-delay: 6s;
+        }
+
+        /* Loading animation before zoom */
+        .loading-ring {
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border: 3px solid transparent;
+            border-top-color: rgba(247, 202, 202, 0.4);
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating decorative elements -->
+    <div class="floating-element">🌸</div>
+    <div class="floating-element">🌿</div>
+    <div class="floating-element">✨</div>
+    <div class="floating-element">🦋</div>
+
+    <!-- Intro Container -->
+    <div class="intro-container" id="introContainer">
+        <div class="loading-ring"></div>
+        <div class="intro-circle" id="introCircle">
+            <div class="intro-content">
+                <div class="intro-logo">Brew</div>
+                <div class="intro-subtitle">Your Sanctuary</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="intro-hint">Click to enter →</div>
+
+    <script>
+        const introContainer = document.getElementById('introContainer');
+        const introCircle = document.getElementById('introCircle');
+
+        // Zoom in on click
+        introCircle.addEventListener('click', function() {
+            introContainer.classList.add('zoom-in');
+            
+            // Always redirect to onboarding after Brew intro
+            setTimeout(function() {
+                window.location.href = '/onboarding';
+            }, 1500);
+        });
+
+        // Auto-enter after 5 seconds if user doesn't click
+        setTimeout(function() {
+            if (!introContainer.classList.contains('zoom-in')) {
+                introContainer.classList.add('zoom-in');
+                setTimeout(function() {
+                    window.location.href = '/onboarding';
+                }, 1500);
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
