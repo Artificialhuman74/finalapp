@@ -1,0 +1,178 @@
+[
+  {
+    "timestamp": "2026-01-05T10:17:43.848355",
+    "message": "\ud83d\udea8 EMERGENCY ALERT from Vrunda! Location: https://localhost:5443/track/1 | Battery: Unknown | Time: 10:17 AM",
+    "contacts": [
+      {
+        "name": "Mom",
+        "phone": "+918618147776",
+        "relationship": "Mother"
+      },
+      {
+        "name": "Appa",
+        "phone": "+918618147776",
+        "relationship": "Father"
+      },
+      {
+        "name": "Sister",
+        "phone": "+918618147776",
+        "relationship": "Sister"
+      }
+    ],
+    "type": "SOS_ALERT"
+  },
+  {
+    "timestamp": "2026-01-05T10:17:57.663330",
+    "message": "\ud83d\udea8 EMERGENCY ALERT from Vrunda! Location: https://localhost:5443/track/2 | Battery: Unknown | Time: 10:17 AM",
+    "contacts": [
+      {
+        "name": "Mom",
+        "phone": "+918618147776",
+        "relationship": "Mother"
+      },
+      {
+        "name": "Appa",
+        "phone": "+918618147776",
+        "relationship": "Father"
+      },
+      {
+        "name": "Sister",
+        "phone": "+918618147776",
+        "relationship": "Sister"
+      }
+    ],
+    "type": "SOS_ALERT"
+  },
+  {
+    "timestamp": "2026-01-05T11:58:04.236135",
+    "message": "\ud83d\udea8 EMERGENCY ALERT from Vrunda! Location: https://localhost:5443/track/3 | Battery: Unknown | Time: 11:58 AM",
+    "contacts": [
+      {
+        "name": "Mom",
+        "phone": "+918618147776",
+        "relationship": "Mother"
+      },
+      {
+        "name": "Appa",
+        "phone": "+918618147776",
+        "relationship": "Father"
+      },
+      {
+        "name": "Sister",
+        "phone": "+918618147776",
+        "relationship": "Sister"
+      }
+    ],
+    "type": "SOS_ALERT"
+  },
+  {
+    "timestamp": "2026-01-05T14:13:19.110887",
+    "message": "\ud83d\udea8 EMERGENCY ALERT from Vrunda! Location: https://localhost:5443/track/4 | Battery: Unknown | Time: 02:13 PM",
+    "contacts": [
+      {
+        "name": "Mom",
+        "phone": "+918618147776",
+        "relationship": "Mother"
+      },
+      {
+        "name": "Appa",
+        "phone": "+918618147776",
+        "relationship": "Father"
+      },
+      {
+        "name": "Sister",
+        "phone": "+918618147776",
+        "relationship": "Sister"
+      }
+    ],
+    "type": "SOS_ALERT"
+  },
+  {
+    "timestamp": "2026-01-05T14:44:55.001949",
+    "message": "\ud83d\udea8 EMERGENCY ALERT from Vrunda! Location: https://localhost:5443/track/5 | Battery: Unknown | Time: 02:44 PM",
+    "contacts": [
+      {
+        "name": "Mom",
+        "phone": "+918618147776",
+        "relationship": "Mother"
+      },
+      {
+        "name": "Appa",
+        "phone": "+918618147776",
+        "relationship": "Father"
+      },
+      {
+        "name": "Sister",
+        "phone": "+918618147776",
+        "relationship": "Sister"
+      }
+    ],
+    "type": "SOS_ALERT"
+  },
+  {
+    "timestamp": "2026-01-05T14:53:55.504165",
+    "message": "\ud83d\udea8 EMERGENCY ALERT from Vrunda! Location: https://localhost:5443/track/6 | Battery: Unknown | Time: 02:53 PM",
+    "contacts": [
+      {
+        "name": "Mom",
+        "phone": "+918618147776",
+        "relationship": "Mother"
+      },
+      {
+        "name": "Appa",
+        "phone": "+918618147776",
+        "relationship": "Father"
+      },
+      {
+        "name": "Sister",
+        "phone": "+918618147776",
+        "relationship": "Sister"
+      }
+    ],
+    "type": "SOS_ALERT"
+  },
+  {
+    "timestamp": "2026-01-05T15:14:40.160147",
+    "message": "\ud83d\udea8 EMERGENCY ALERT from Vrunda! Location: https://localhost:5443/track/7 | Battery: Unknown | Time: 03:14 PM",
+    "contacts": [
+      {
+        "name": "Mom",
+        "phone": "+918618147776",
+        "relationship": "Mother"
+      },
+      {
+        "name": "Appa",
+        "phone": "+918618147776",
+        "relationship": "Father"
+      },
+      {
+        "name": "Sister",
+        "phone": "+918618147776",
+        "relationship": "Sister"
+      }
+    ],
+    "type": "SOS_ALERT"
+  },
+  {
+    "timestamp": "2026-01-05T15:15:01.720953",
+    "message": "\ud83d\udea8 EMERGENCY ALERT from Vrunda! Location: https://localhost:5443/track/8 | Battery: Unknown | Time: 03:15 PM",
+    "contacts": [
+      {
+        "name": "Mom",
+        "phone": "+918618147776",
+        "relationship": "Mother"
+      },
+      {
+        "name": "Appa",
+        "phone": "+918618147776",
+        "relationship": "Father"
+      },
+      {
+        "name": "Sister",
+        "phone": "+918618147776",
+        "relationship": "Sister"
+      }
+    ],
+    "type": "SOS_ALERT"
+  }
+]

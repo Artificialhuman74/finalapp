@@ -1,0 +1,63 @@
+.floating-decorations {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.decoration {
+    position: absolute;
+    opacity: 0.25;
+    filter: blur(0.5px);
+    will-change: transform;
+}
+
+.decoration.butterfly {
+    color: #d4a5a5;
+}
+
+.decoration.heart {
+    color: #e8b8c8;
+}
+
+.decoration.flower {
+    color: #c8a8d8;
+}
+
+/* Add slight variations for different decorations */
+.decoration:nth-child(3n + 1) {
+    opacity: 0.2;
+}
+
+.decoration:nth-child(3n + 2) {
+    opacity: 0.3;
+    filter: blur(0.3px);
+}
+
+.decoration:nth-child(4n) {
+    opacity: 0.18;
+}
+
+/* Subtle glow effect on some elements */
+.decoration.butterfly:nth-child(5n) {
+    filter: drop-shadow(0 0 4px rgba(212, 165, 165, 0.5));
+}
+
+.decoration.heart:nth-child(5n + 1) {
+    filter: drop-shadow(0 0 4px rgba(232, 184, 200, 0.5));
+}
+
+.decoration.flower:nth-child(5n + 2) {
+    filter: drop-shadow(0 0 4px rgba(200, 168, 216, 0.5));
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .decoration {
+        opacity: 0.18;
+    }
+}

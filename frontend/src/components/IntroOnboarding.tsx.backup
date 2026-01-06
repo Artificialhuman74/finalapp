@@ -1,0 +1,276 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import './IntroOnboarding.css';
+
+interface Permission {
+  type: 'location' | 'notification' | 'microphone' | 'camera';
+  granted: boolean;
+}
+
+interface OnboardingSlide {
+  title: string;
+  subtitle: string;
+  description: string;
+  icon: string;
+  gradient: string;
+  permissions: Permission['type'][];
+  animation: string;
+}
+
+const IntroOnboarding: React.FC = () => {
+  const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState(0);
+  const [permissions, setPermissions] = useState<Permission[]>([
+    { type: 'location', granted: false },
+    { type: 'notification', granted: false },
+    { type: 'microphone', granted: false },
+    { type: 'camera', granted: false }
+  ]);
+
+  useEffect(() => {
+    const onboardingComplete = localStorage.getItem('onboarding_complete');
+    if (onboardingComplete === 'true') {
+      navigate('/');
+    }
+  }, [navigate]);
+
+  const slides: OnboardingSlide[] = [
+    {
+      title: '🛡️ SafeGuard',
+      subtitle: 'Stay Protected, Always',
+      description: 'Your personal safety companion with instant emergency alerts, safe route planning, and community support.',
+      icon: '🛡️',
+      gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      permissions: [],
+      animation: 'pulse'
+    },
+    {
+      title: '🚨 SOS Emergency',
+      subtitle: 'Help When You Need It',
+      description: 'One-tap emergency alerts with live GPS tracking, automatic SMS & WhatsApp notifications to emergency contacts.',
+      icon: '🚨',
+      gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+      permissions: ['location', 'notification'],
+      animation: 'alert'
+    },
+    {
+      title: '🗺️ Safe Routes',
+      subtitle: 'Navigate with Confidence',
+      description: 'AI-powered route optimization analyzing crime, lighting, and population data for the safest path.',
+      icon: '🗺️',
+      gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+      permissions: ['location'],
+      animation: 'pathDraw'
+    },
+    {
+      title: '📝 Incident Report',
+      subtitle: 'Your Voice Matters',
+      description: 'Document incidents with AI summaries, evidence uploads, and anonymous reporting to help others.',
+      icon: '📝',
+      gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+      permissions: ['camera'],
+      animation: 'writePen'
+    },
+    {
+      title: '📞 Fake Call AI',
+      subtitle: 'Escape Discreetly',
+      description: 'AI-powered conversational fake calls with realistic responses to help you escape uncomfortable situations.',
+      icon: '📞',
+      gradient: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+      permissions: ['microphone'],
+      animation: 'phoneRing'
+    },
+    {
+      title: '🤝 Community',
+      subtitle: 'You Are Not Alone',
+      description: 'Share stories anonymously, get peer support, and access AI-powered emotional support anytime.',
+      icon: '🤝',
+      gradient: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+      permissions: [],
+      animation: 'chatBubbles'
+    }
+  ];
+
+  const requestPermission = async (type: Permission['type']) => {
+    let granted = false;
+
+    try {
+      switch (type) {
+        case 'location':
+          const geoResult = await new Promise<boolean>((resolve) => {
+            navigator.geolocation.getCurrentPosition(
+              () => resolve(true),
+              () => resolve(false)
+            );
+          });
+          granted = geoResult;
+          break;
+
+        case 'notification':
+          if ('Notification' in window) {
+            const result = await Notification.requestPermission();
+            granted = result === 'granted';
+          }
+          break;
+
+        case 'microphone':
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            stream.getTracks().forEach(track => track.stop());
+            granted = true;
+          } catch {
+            granted = false;
+          }
+          break;
+
+        case 'camera':
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            stream.getTracks().forEach(track => track.stop());
+            granted = true;
+          } catch {
+            granted = false;
+          }
+          break;
+      }
+
+      setPermissions(prev =>
+        prev.map(p => (p.type === type ? { ...p, granted } : p))
+      );
+    } catch (error) {
+      console.error(`Error requesting ${type} permission:`, error);
+    }
+  };
+
+  const completeOnboarding = () => {
+    localStorage.setItem('onboarding_complete', 'true');
+    navigate('/login');
+  };
+
+  const handleNext = () => {
+    if (currentStep < slides.length - 1) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      completeOnboarding();
+    }
+  };
+
+  const handleBack = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  const slide = slides[currentStep];
+  const isLastSlide = currentStep === slides.length - 1;
+
+  const getPermissionEmoji = (type: Permission['type']) => {
+    const emojiMap: Record<Permission['type'], string> = {
+      location: '📍',
+      notification: '🔔',
+      microphone: '🎤',
+      camera: '📹'
+    };
+    return emojiMap[type];
+  };
+
+  return (
+    <div className="onboarding-container">
+      <div className="onboarding-bg" style={{ background: slide.gradient }}></div>
+
+      <div className="onboarding-content">
+        {/* Icon with animation */}
+        <div className={`onboarding-icon onboarding-icon-${slide.animation} ${currentStep === 1 ? 'active' : ''}`}>
+          {slide.icon}
+          {slide.animation === 'alert' && (
+            <>
+              <div className="alert-dot alert-dot-1"></div>
+              <div className="alert-dot alert-dot-2"></div>
+              <div className="alert-dot alert-dot-3"></div>
+            </>
+          )}
+        </div>
+
+        {/* Text Content */}
+        <div className="onboarding-text">
+          <h1 className="onboarding-title">{slide.title}</h1>
+          <h2 className="onboarding-subtitle">{slide.subtitle}</h2>
+          <p className="onboarding-description">{slide.description}</p>
+        </div>
+
+        {/* Permissions */}
+        {slide.permissions.length > 0 && (
+          <div className="onboarding-permissions">
+            <div className="onboarding-permissions-grid">
+              {slide.permissions.map(permType => {
+                const perm = permissions.find(p => p.type === permType);
+                return (
+                  <button
+                    key={permType}
+                    className={`onboarding-perm-btn ${perm?.granted ? 'granted' : ''}`}
+                    onClick={() => requestPermission(permType)}
+                    disabled={perm?.granted}
+                    title={perm?.granted ? `${permType} permission granted` : `Request ${permType} permission`}
+                  >
+                    <span className="perm-icon">{perm?.granted ? '✓' : getPermissionEmoji(permType)}</span>
+                    <span className="perm-text">{permType}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Navigation */}
+        <div className="onboarding-nav">
+          {/* Progress Dots */}
+          <div className="onboarding-dots">
+            {slides.map((_, index) => (
+              <div
+                key={index}
+                className={`onboarding-dot ${index === currentStep ? 'active' : ''}`}
+                onClick={() => setCurrentStep(index)}
+              ></div>
+            ))}
+          </div>
+
+          {/* Buttons */}
+          <div className="onboarding-buttons">
+            {currentStep > 0 && (
+              <button
+                className="onboarding-btn secondary"
+                onClick={handleBack}
+              >
+                Back
+              </button>
+            )}
+            {isLastSlide ? (
+              <button
+                className="onboarding-btn primary"
+                onClick={completeOnboarding}
+              >
+                Get Started
+              </button>
+            ) : (
+              <button
+                className="onboarding-btn primary"
+                onClick={handleNext}
+              >
+                Next
+              </button>
+            )}
+          </div>
+
+          {/* Skip */}
+          {currentStep < slides.length - 1 && (
+            <button className="onboarding-skip" onClick={completeOnboarding}>
+              Skip for now
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default IntroOnboarding;

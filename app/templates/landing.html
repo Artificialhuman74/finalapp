@@ -1,0 +1,379 @@
+{% extends "base.html" %}
+
+{% block title %}Brew - Your Brew Starts Here{% endblock %}
+
+{% block content %}
+<!-- Intro Animation Overlay -->
+<div class="intro-overlay" id="introOverlay">
+    <div class="floating-element intro-float-1">🌸</div>
+    <div class="floating-element intro-float-2">🌿</div>
+    <div class="floating-element intro-float-3">✨</div>
+    <div class="floating-element intro-float-4">🦋</div>
+    
+    <div class="loading-ring"></div>
+    <div class="intro-circle" id="introCircle">
+        <div class="intro-content">
+            <div class="intro-logo">Brew</div>
+            <div class="intro-subtitle">Your Sanctuary</div>
+        </div>
+    </div>
+    <div class="intro-hint">Click to enter →</div>
+</div>
+
+<!-- Pastel Sanctuary Hero Section -->
+<section class="hero-sanctuary">
+    <div class="floral-accent top-left">🌸</div>
+    <div class="floral-accent bottom-right">🌿</div>
+    
+    <div class="hero-content fade-in-up">
+        <h1 class="hero-title">Where Safety<br>Feels Like Home.</h1>
+        
+        <p class="hero-subtitle">
+            A gentle, secure sanctuary where you can share, heal, and find support. 
+            You're not alone — we're here for you, always.
+        </p>
+        
+        <div class="d-flex gap-4 justify-content-center flex-wrap mt-5">
+            <a href="{{ url_for('main.report_incident') }}" class="btn btn-primary btn-lg">
+                Share Your Story
+            </a>
+            
+            <a href="{{ url_for('main.safe_routes') }}" class="btn btn-lavender btn-lg">
+                Find Safe Routes
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">
+            How We Support You
+        </h2>
+        
+        <div class="row g-4">
+            <!-- Feature 1 -->
+            <div class="col-md-4">
+                <div class="card feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="feature-title">Anonymous & Safe</h3>
+                    <p class="feature-description">Share your experiences privately, without judgment or pressure.</p>
+                </div>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="col-md-4">
+                <div class="card feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h3 class="feature-title">Community Support</h3>
+                    <p class="feature-description">Connect with a caring community of women who understand and uplift.</p>
+                </div>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="col-md-4">
+                <div class="card feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Safe Navigation</h3>
+                    <p class="feature-description">Find the safest routes home, day or night, with smart guidance.</p>
+                </div>
+            </div>
+            
+            <!-- Feature 4 -->
+            <div class="col-md-4">
+                <div class="card feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Instant SOS</h3>
+                    <p class="feature-description">Quick access to emergency contacts and support when you need it most.</p>
+                </div>
+            </div>
+            
+            <!-- Feature 5 -->
+            <div class="col-md-4">
+                <div class="card feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Your Privacy Protected</h3>
+                    <p class="feature-description">Your information stays secure and confidential, always.</p>
+                </div>
+            </div>
+            
+            <!-- Feature 6 -->
+            <div class="col-md-4">
+                <div class="card feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="feature-title">Caring Conversations</h3>
+                    <p class="feature-description">Talk to someone who listens and understands what you're going through.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-sanctuary">
+    <div class="container">
+        <h2 class="text-center mb-5">
+            You're Never Alone
+        </h2>
+        
+        <div class="row text-center g-4">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="stat-number">24/7</h3>
+                        <p class="stat-label">Always Here</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="stat-number">100%</h3>
+                        <p class="stat-label">Confidential</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="stat-number">∞</h3>
+                        <p class="stat-label">Support</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="stat-number">0</h3>
+                        <p class="stat-label">Judgment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Safety Banner -->
+<section class="py-5">
+    <div class="container text-center">
+        <h2 class="mb-4">Need Immediate Help?</h2>
+        <p class="lead mb-4" style="color: var(--text-secondary);">We're here for you, right now.</p>
+        
+        <div class="d-flex gap-3 justify-content-center flex-wrap">
+            <a href="{{ url_for('main.sos_center') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-exclamation-triangle me-2"></i> SOS Center
+            </a>
+            
+            <a href="{{ url_for('main.emergency_contacts') }}" class="btn btn-lavender btn-lg">
+                <i class="fas fa-phone me-2"></i> Emergency Contacts
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<style>
+    /* Intro Overlay Styles */
+    .intro-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #F9DDE2 0%, #FBEFF6 50%, #FFF8F4 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 99999;
+        transition: all 1.5s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    .intro-overlay.zoom-in {
+        transform: scale(20);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .intro-circle {
+        width: 400px;
+        height: 400px;
+        background: linear-gradient(135deg, #F7CACA 0%, #F9DDE2 50%, #FBEFF6 100%);
+        border-radius: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.6s cubic-bezier(0.76, 0, 0.24, 1);
+        box-shadow: 
+            0 20px 60px rgba(249, 221, 226, 0.4),
+            0 0 0 20px rgba(255, 255, 255, 0.1),
+            0 0 0 40px rgba(255, 255, 255, 0.05);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .intro-circle::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transform: rotate(45deg);
+        animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    .intro-circle:hover {
+        transform: scale(1.05);
+        box-shadow: 
+            0 30px 80px rgba(249, 221, 226, 0.5),
+            0 0 0 20px rgba(255, 255, 255, 0.2),
+            0 0 0 40px rgba(255, 255, 255, 0.1);
+    }
+
+    .intro-content {
+        position: relative;
+        z-index: 2;
+        text-align: center;
+    }
+
+    .intro-logo {
+        font-family: 'Playfair Display', serif;
+        font-size: 5rem;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: 1rem;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .intro-subtitle {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.95);
+        font-weight: 500;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 0.8; }
+        50% { opacity: 1; }
+    }
+
+    .intro-hint {
+        position: absolute;
+        bottom: 80px;
+        font-size: 0.9rem;
+        color: rgba(0, 0, 0, 0.5);
+        animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .floating-element {
+        position: absolute;
+        font-size: 2rem;
+        opacity: 0.2;
+        animation: floatAround 20s ease-in-out infinite;
+    }
+
+    @keyframes floatAround {
+        0%, 100% { transform: translate(0, 0) rotate(0deg); }
+        25% { transform: translate(100px, -100px) rotate(90deg); }
+        50% { transform: translate(200px, 0) rotate(180deg); }
+        75% { transform: translate(100px, 100px) rotate(270deg); }
+    }
+
+    .intro-float-1 {
+        top: 10%;
+        left: 10%;
+        animation-delay: 0s;
+    }
+
+    .intro-float-2 {
+        top: 20%;
+        right: 15%;
+        animation-delay: 2s;
+    }
+
+    .intro-float-3 {
+        bottom: 15%;
+        left: 15%;
+        animation-delay: 4s;
+    }
+
+    .intro-float-4 {
+        bottom: 10%;
+        right: 10%;
+        animation-delay: 6s;
+    }
+
+    .loading-ring {
+        position: absolute;
+        width: 420px;
+        height: 420px;
+        border: 3px solid transparent;
+        border-top-color: rgba(247, 202, 202, 0.4);
+        border-radius: 50%;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const introOverlay = document.getElementById('introOverlay');
+        const introCircle = document.getElementById('introCircle');
+
+        // Zoom in on click
+        introCircle.addEventListener('click', function() {
+            introOverlay.classList.add('zoom-in');
+        });
+
+        // Auto-enter after 5 seconds if user doesn't click
+        setTimeout(function() {
+            if (!introOverlay.classList.contains('zoom-in')) {
+                introOverlay.classList.add('zoom-in');
+            }
+        }, 5000);
+    });
+</script>
+{% endblock %}

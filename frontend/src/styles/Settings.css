@@ -1,0 +1,252 @@
+/* Settings Page */
+.settings-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  background: linear-gradient(180deg, #fbeff6 0%, #fff8f4 100%);
+  min-height: 100vh;
+  padding: 40px 20px 220px 20px;
+}
+
+.settings-header {
+  max-width: 900px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.settings-header h1 {
+  font-size: 32px;
+  font-weight: 800;
+  color: #2d1b69;
+  margin-bottom: 10px;
+}
+
+.settings-header p {
+  font-size: 16px;
+  color: #6b5b8d;
+  margin-bottom: 0;
+}
+
+.settings-content {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-card {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.settings-card h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #2d1b69;
+  margin-bottom: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #2d1b69;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e8ddf0;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #2d1b69;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+  border-color: #c9a961;
+  box-shadow: 0 0 0 3px rgba(201, 169, 97, 0.1);
+  outline: none;
+}
+
+/* Privacy Toggles */
+.settings-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.toggle-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  background: linear-gradient(135deg, #f9dde2 0%, #fbeff6 100%);
+  border-radius: 12px;
+  gap: 20px;
+}
+
+.toggle-item strong {
+  display: block;
+  font-size: 16px;
+  color: #2d1b69;
+  margin-bottom: 4px;
+}
+
+.toggle-item p {
+  font-size: 14px;
+  color: #6b5b8d;
+  margin-bottom: 0;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 56px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e0;
+  transition: 0.4s;
+  border-radius: 30px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: '';
+  height: 22px;
+  width: 22px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked+.toggle-slider {
+  background-color: #c9a961;
+}
+
+.toggle-switch input:checked+.toggle-slider:before {
+  transform: translateX(26px);
+}
+
+/* Buttons */
+.btn {
+  padding: 12px 32px;
+  border-radius: 10px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 16px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #c9a961 0%, #d4af37 100%);
+  color: white;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(201, 169, 97, 0.3);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: white;
+}
+
+.btn-warning:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff5555 100%);
+  color: white;
+}
+
+.btn-danger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+}
+
+.btn-outline-danger {
+  background: white;
+  border: 2px solid #ff6b6b;
+  color: #ff6b6b;
+}
+
+.btn-outline-danger:hover {
+  background: #ff6b6b;
+  color: white;
+}
+
+/* Danger Zone */
+.danger-zone {
+  border: 2px solid #ff6b6b;
+}
+
+.danger-zone h3 {
+  color: #ff6b6b;
+}
+
+.danger-zone p {
+  color: #6b5b8d;
+  margin-bottom: 20px;
+}
+
+.danger-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .settings-container {
+    padding: 20px 10px 120px 10px;
+    /* Added bottom padding for mobile nav */
+  }
+
+  .settings-card {
+    padding: 24px 20px;
+  }
+
+  .toggle-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .danger-actions {
+    flex-direction: column;
+  }
+
+  .danger-actions .btn {
+    width: 100%;
+  }
+}

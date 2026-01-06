@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+
+{% block title %}User Agreement - Women Safety App{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Header Section -->
+            <div class="text-center mb-5">
+                <h1 class="display-5 mb-3" style="font-weight: 700; color: #2D3748;">User Agreement & Privacy</h1>
+                <p class="lead text-secondary">Please review our terms and understand how we protect your data</p>
+            </div>
+
+            <!-- Agreement Cards Grid -->
+            <div class="agreement-cards-container">
+                
+                <!-- Card 1: Terms of Service -->
+                <div class="agreement-card">
+                    <div class="agreement-card-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5L14 4.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5h-2z"/>
+                        </svg>
+                    </div>
+                    <h3 class="agreement-card-title">Terms of Service</h3>
+                    <p class="agreement-card-text">
+                        By using our platform, you agree to use the services responsibly and lawfully. You are responsible for maintaining the confidentiality of your account information.
+                    </p>
+                    <ul class="agreement-card-list">
+                        <li>You must be 13 years or older to create an account</li>
+                        <li>Do not share false or misleading information</li>
+                        <li>Respect other users and community guidelines</li>
+                        <li>Report any misuse or violations promptly</li>
+                    </ul>
+                    <div class="agreement-card-footer">
+                        <button class="agreement-expand-btn" data-bs-toggle="collapse" data-bs-target="#terms-details">
+                            Read Full Terms →
+                        </button>
+                    </div>
+                    <div class="collapse mt-3" id="terms-details">
+                        <div class="agreement-details-box">
+                            <h5>Full Terms of Service</h5>
+                            <p><strong>1. Acceptance of Terms</strong><br>
+                            By accessing and using this safety application, you accept and agree to be bound by these Terms of Service.</p>
+                            
+                            <p><strong>2. User Responsibilities</strong><br>
+                            Users must provide accurate information, maintain account security, and use the platform for its intended safety purposes only.</p>
+                            
+                            <p><strong>3. Prohibited Activities</strong><br>
+                            Users may not engage in harassment, share false reports, attempt to compromise platform security, or use the service for any unlawful purpose.</p>
+                            
+                            <p><strong>4. Service Modifications</strong><br>
+                            We reserve the right to modify or discontinue services with reasonable notice to users.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Privacy Policy -->
+                <div class="agreement-card">
+                    <div class="agreement-card-icon privacy-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
+                        </svg>
+                    </div>
+                    <h3 class="agreement-card-title">Privacy Policy</h3>
+                    <p class="agreement-card-text">
+                        Your privacy is paramount. We are committed to protecting your personal information and being transparent about how we collect and use your data.
+                    </p>
+                    <ul class="agreement-card-list">
+                        <li>All data is encrypted end-to-end</li>
+                        <li>We never sell your personal information</li>
+                        <li>You can delete your data at any time</li>
+                        <li>Anonymous posting options available</li>
+                    </ul>
+                    <div class="agreement-card-footer">
+                        <button class="agreement-expand-btn" data-bs-toggle="collapse" data-bs-target="#privacy-details">
+                            Read Privacy Policy →
+                        </button>
+                    </div>
+                    <div class="collapse mt-3" id="privacy-details">
+                        <div class="agreement-details-box">
+                            <h5>Privacy Policy Details</h5>
+                            <p><strong>Data Collection</strong><br>
+                            We collect only essential information: email, username, and safety-related data you choose to share (location during emergencies, incident reports).</p>
+                            
+                            <p><strong>Data Usage</strong><br>
+                            Your data is used solely for: providing safety services, improving route recommendations, connecting you with emergency services, and community support features.</p>
+                            
+                            <p><strong>Data Protection</strong><br>
+                            We employ industry-standard encryption, secure servers, regular security audits, and strict access controls to protect your information.</p>
+                            
+                            <p><strong>Your Rights</strong><br>
+                            You have the right to access, modify, export, or delete your personal data at any time through your account settings.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Data Usage -->
+                <div class="agreement-card">
+                    <div class="agreement-card-icon data-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5v-3zM2.5 2a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zM1 10.5A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3zm6.5.5A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5v-3zm1.5-.5a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5h-3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="agreement-card-title">How We Use Your Data</h3>
+                    <p class="agreement-card-text">
+                        Understanding how your data helps keep you and others safe is important. Here's what we do with the information you share.
+                    </p>
+                    <ul class="agreement-card-list">
+                        <li>Location data: Only for real-time safety features</li>
+                        <li>Incident reports: Anonymized for community awareness</li>
+                        <li>Emergency contacts: Secure storage, only used in SOS</li>
+                        <li>Route history: Helps optimize safe path suggestions</li>
+                    </ul>
+                    <div class="agreement-card-footer">
+                        <button class="agreement-expand-btn" data-bs-toggle="collapse" data-bs-target="#data-usage-details">
+                            Learn More →
+                        </button>
+                    </div>
+                    <div class="collapse mt-3" id="data-usage-details">
+                        <div class="agreement-details-box">
+                            <h5>Detailed Data Usage</h5>
+                            <p><strong>Location Services</strong><br>
+                            We access your location only when you use safety features like safe routes or activate SOS. Location data is encrypted and can be auto-deleted based on your retention settings.</p>
+                            
+                            <p><strong>Community Safety Data</strong><br>
+                            Incident reports you share help create safer routes for everyone. All reports are anonymized unless you explicitly choose otherwise.</p>
+                            
+                            <p><strong>Emergency Information</strong><br>
+                            Emergency contacts and medical information are stored locally on your device and encrypted in our database, accessible only during SOS activation.</p>
+                            
+                            <p><strong>Analytics</strong><br>
+                            We use anonymized usage data to improve app performance and safety features. No personally identifiable information is used in analytics.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Your Rights -->
+                <div class="agreement-card">
+                    <div class="agreement-card-icon rights-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="agreement-card-title">Your Rights & Control</h3>
+                    <p class="agreement-card-text">
+                        You have complete control over your data and account. We respect your rights and make it easy to manage your information.
+                    </p>
+                    <ul class="agreement-card-list">
+                        <li>Access and download your data anytime</li>
+                        <li>Request data deletion within 48 hours</li>
+                        <li>Opt-out of data collection features</li>
+                        <li>Change privacy settings at any time</li>
+                    </ul>
+                    <div class="agreement-card-footer">
+                        <button class="agreement-expand-btn" data-bs-toggle="collapse" data-bs-target="#rights-details">
+                            View Your Rights →
+                        </button>
+                    </div>
+                    <div class="collapse mt-3" id="rights-details">
+                        <div class="agreement-details-box">
+                            <h5>Complete User Rights</h5>
+                            <p><strong>Right to Access</strong><br>
+                            You can view all data we have about you through your account dashboard or by requesting a full data export.</p>
+                            
+                            <p><strong>Right to Deletion</strong><br>
+                            Request deletion of your account and all associated data. We will process this within 48 hours and confirm when complete.</p>
+                            
+                            <p><strong>Right to Rectification</strong><br>
+                            Update or correct any personal information directly through your account settings.</p>
+                            
+                            <p><strong>Right to Portability</strong><br>
+                            Download your data in a machine-readable format to transfer to another service if desired.</p>
+                            
+                            <p><strong>Right to Object</strong><br>
+                            Opt-out of specific data processing activities while continuing to use core safety features.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5: Cookie Policy -->
+                <div class="agreement-card">
+                    <div class="agreement-card-icon cookie-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M6 7.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm4.5.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm-.5 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                            <path d="M8 0a7.963 7.963 0 0 0-4.075 1.114c-.162.093-.31.214-.437.35-.05.053-.087.114-.112.178-.024.063-.035.131-.035.202 0 .12.05.237.136.324.086.087.203.137.324.137a.465.465 0 0 0 .344-.143A6.986 6.986 0 0 1 8 1c3.859 0 7 3.141 7 7s-3.141 7-7 7-7-3.141-7-7a6.99 6.99 0 0 1 1.047-3.707.465.465 0 0 0-.144-.645.463.463 0 0 0-.644.144A7.975 7.975 0 0 0 0 8c0 4.411 3.589 8 8 8s8-3.589 8-8-3.589-8-8-8z"/>
+                        </svg>
+                    </div>
+                    <h3 class="agreement-card-title">Cookie & Tracking Policy</h3>
+                    <p class="agreement-card-text">
+                        We use minimal cookies necessary for app functionality and your preferences. No third-party tracking or advertising cookies.
+                    </p>
+                    <ul class="agreement-card-list">
+                        <li>Essential cookies for authentication</li>
+                        <li>Preference cookies for your settings</li>
+                        <li>No advertising or tracking cookies</li>
+                        <li>Session data cleared on logout</li>
+                    </ul>
+                    <div class="agreement-card-footer">
+                        <button class="agreement-expand-btn" data-bs-toggle="collapse" data-bs-target="#cookie-details">
+                            Cookie Details →
+                        </button>
+                    </div>
+                    <div class="collapse mt-3" id="cookie-details">
+                        <div class="agreement-details-box">
+                            <h5>Cookie Usage Details</h5>
+                            <p><strong>Essential Cookies</strong><br>
+                            Required for basic functionality like keeping you logged in, maintaining session security, and remembering your language preference.</p>
+                            
+                            <p><strong>Functional Cookies</strong><br>
+                            Store your preferences like theme choice, notification settings, and default privacy options to enhance user experience.</p>
+                            
+                            <p><strong>What We Don't Use</strong><br>
+                            We do not use advertising cookies, social media tracking pixels, or any third-party analytics that could identify you personally.</p>
+                            
+                            <p><strong>Managing Cookies</strong><br>
+                            You can clear cookies through your browser settings at any time. Note that essential cookies are required for the app to function properly.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6: Updates & Contact -->
+                <div class="agreement-card">
+                    <div class="agreement-card-icon contact-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
+                        </svg>
+                    </div>
+                    <h3 class="agreement-card-title">Updates & Contact</h3>
+                    <p class="agreement-card-text">
+                        We may update these policies to improve our services. You'll always be notified of significant changes and can review them here.
+                    </p>
+                    <ul class="agreement-card-list">
+                        <li>Email notifications for policy updates</li>
+                        <li>30-day notice for major changes</li>
+                        <li>Version history available on request</li>
+                        <li>Contact us anytime with questions</li>
+                    </ul>
+                    <div class="agreement-card-footer">
+                        <a href="mailto:support@womensafety.com" class="agreement-expand-btn">
+                            Contact Support →
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Agreement Acceptance Section -->
+            <div class="agreement-acceptance-section">
+                <div class="card border-0 shadow-sm" style="border-radius: 16px;">
+                    <div class="card-body p-4">
+                        <h4 class="mb-4" style="font-weight: 700; color: #2D3748;">Agreement Confirmation</h4>
+                        
+                        <div class="form-check mb-3 p-3" style="background: #F7FAFC; border-radius: 8px;">
+                            <input class="form-check-input" type="checkbox" id="accept-terms" style="margin-top: 0.4rem;">
+                            <label class="form-check-label" for="accept-terms" style="margin-left: 0.5rem;">
+                                <strong>I have read and agree to the Terms of Service</strong><br>
+                                <small class="text-secondary">You understand your rights and responsibilities as a user</small>
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-3 p-3" style="background: #F7FAFC; border-radius: 8px;">
+                            <input class="form-check-input" type="checkbox" id="accept-privacy" style="margin-top: 0.4rem;">
+                            <label class="form-check-label" for="accept-privacy" style="margin-left: 0.5rem;">
+                                <strong>I understand the Privacy Policy and data usage</strong><br>
+                                <small class="text-secondary">You know how your data is collected, used, and protected</small>
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-4 p-3" style="background: #F7FAFC; border-radius: 8px;">
+                            <input class="form-check-input" type="checkbox" id="accept-cookies" style="margin-top: 0.4rem;">
+                            <label class="form-check-label" for="accept-cookies" style="margin-left: 0.5rem;">
+                                <strong>I accept the use of essential cookies</strong><br>
+                                <small class="text-secondary">Required for the app to function properly</small>
+                            </label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="button" id="continue-btn" class="btn btn-primary btn-lg" disabled
+                                    style="font-weight: 600; border-radius: 8px; padding: 0.875rem;">
+                                Continue to Sign Up
+                            </button>
+                            <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary" 
+                               style="border-radius: 8px; padding: 0.875rem;">
+                                Go Back
+                            </a>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <small class="text-secondary">
+                                Last updated: December 25, 2025 | <a href="#" style="color: #4299E1;">Download PDF</a>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+// Enable continue button only when all checkboxes are checked
+document.addEventListener('DOMContentLoaded', function() {
+    const termsCheckbox = document.getElementById('accept-terms');
+    const privacyCheckbox = document.getElementById('accept-privacy');
+    const cookiesCheckbox = document.getElementById('accept-cookies');
+    const continueBtn = document.getElementById('continue-btn');
+
+    function checkAllAccepted() {
+        if (termsCheckbox.checked && privacyCheckbox.checked && cookiesCheckbox.checked) {
+            continueBtn.disabled = false;
+            continueBtn.style.opacity = '1';
+        } else {
+            continueBtn.disabled = true;
+            continueBtn.style.opacity = '0.6';
+        }
+    }
+
+    termsCheckbox.addEventListener('change', checkAllAccepted);
+    privacyCheckbox.addEventListener('change', checkAllAccepted);
+    cookiesCheckbox.addEventListener('change', checkAllAccepted);
+
+    continueBtn.addEventListener('click', function() {
+        if (!continueBtn.disabled) {
+            // Store acceptance in sessionStorage
+            sessionStorage.setItem('agreementAccepted', 'true');
+            window.location.href = "{{ url_for('main.signup') }}";
+        }
+    });
+});
+</script>
+{% endblock %}

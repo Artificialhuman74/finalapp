@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Video Playback Test</title>
+</head>
+
+<body>
+    <h1>Video Playback Test</h1>
+    <p>Try to play the video below. If it fails, check the console (F12).</p>
+
+    <!-- We'll use a relative path assuming this is served from frontend port 3000 
+         and pointing to backend port 5443. 
+         We need to know the exact filename. I'll use one found in debug logs. -->
+
+    <h3>Proxied Video (Relative Path)</h3>
+    <video controls playsinline width="320" height="240">
+        <source src="/uploads/sos/recordings/20260106_092908_sos_1767691748892.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <h3>Direct Video Tag (HTTPS Localhost)</h3>
+    <video controls playsinline width="320" height="240" crossorigin="anonymous">
+        <source src="https://localhost:5443/uploads/sos/recordings/20260106_092908_sos_1767691748892.mp4"
+            type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <h3>Direct Video Tag (HTTPS IP)</h3>
+    <video controls playsinline width="320" height="240" crossorigin="anonymous">
+        <source src="https://192.168.1.104:5443/uploads/sos/recordings/20260106_092908_sos_1767691748892.mp4"
+            type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <h3>Debug Info</h3>
+    <div id="debug"></div>
+
+    <script>
+        const videos = document.querySelectorAll('video');
+        const debug = document.getElementById('debug');
+
+        videos.forEach((v, i) => {
+            v.addEventListener('error', (e) => {
+                console.error(`Video ${i} error:`, v.error);
+                debug.innerHTML += `<p style="color:red">Video ${i} Error: ${v.error ? v.error.message : 'Unknown'} (Code: ${v.error ? v.error.code : 'N/A'})</p>`;
+            });
+            v.addEventListener('canplay', () => {
+                console.log(`Video ${i} can play`);
+                debug.innerHTML += `<p style="color:green">Video ${i} Can Play</p>`;
+            });
+        });
+    </script>
+</body>
+
+</html>

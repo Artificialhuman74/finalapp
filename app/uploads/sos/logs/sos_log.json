@@ -1,0 +1,83 @@
+[
+  {
+    "user": "Anonymous",
+    "time": "2026-01-05T10:17:43.715Z",
+    "intensity": "N/A",
+    "location": {},
+    "contactsNotified": 0,
+    "triggeredBy": "Button",
+    "sosId": 1
+  },
+  {
+    "user": "Anonymous",
+    "time": "2026-01-05T10:17:57.651Z",
+    "intensity": "N/A",
+    "location": {},
+    "contactsNotified": 0,
+    "triggeredBy": "Button",
+    "sosId": 2
+  },
+  {
+    "user": "Anonymous",
+    "time": "2026-01-05T11:58:04.067Z",
+    "intensity": "N/A",
+    "location": {},
+    "contactsNotified": 0,
+    "triggeredBy": "Button",
+    "sosId": 3
+  },
+  {
+    "user": "Anonymous",
+    "time": "2026-01-05T14:13:18.370Z",
+    "intensity": "N/A",
+    "location": {},
+    "contactsNotified": 0,
+    "triggeredBy": "Button",
+    "sosId": 4
+  },
+  {
+    "user": "Anonymous",
+    "time": "2026-01-05T14:44:54.866Z",
+    "intensity": "N/A",
+    "location": {},
+    "contactsNotified": 0,
+    "triggeredBy": "Button",
+    "sosId": 5
+  },
+  {
+    "user": "Anonymous",
+    "time": "2026-01-05T14:53:55.330Z",
+    "intensity": "N/A",
+    "location": {},
+    "contactsNotified": 0,
+    "triggeredBy": "Button",
+    "sosId": 6
+  },
+  {
+    "user": "Anonymous",
+    "time": "2026-01-05T15:14:39.970Z",
+    "intensity": "N/A",
+    "location": {},
+    "contactsNotified": 0,
+    "triggeredBy": "Button",
+    "sosId": 7
+  },
+  {
+    "user": "Anonymous",
+    "time": "2026-01-05T15:15:01.347Z",
+    "intensity": "N/A",
+    "location": {
+      "latitude": 12.96904,
+      "longitude": 77.4963
+    },
+    "contactsNotified": 0,
+    "triggeredBy": "Button",
+    "sosId": 8
+  },
+  {
+    "sosId": 7,
+    "latitude": 12.969044466350553,
+    "longitude": 77.49630145980302,
+    "timestamp": "2026-01-05T15:15:01.353Z"
+  }
+]

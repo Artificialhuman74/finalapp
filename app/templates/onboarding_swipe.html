@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - Onboarding</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+/* Soft Pastel Aesthetic */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --pastel-blush: #FFB6C1;
+    --pastel-cream: #FFF8E7;
+    --pastel-lavender: #E6E6FA;
+    --pastel-peach: #FFDAB9;
+    --pastel-mint: #E0F8F7;
+    --pastel-rose: #FFE4E1;
+    --text-soft-gray: #4A4A4A;
+    --text-dark-gray: #2A2A2A;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, var(--pastel-cream) 0%, var(--pastel-lavender) 50%, var(--pastel-mint) 100%);
+    overflow: hidden;
+    height: 100vh;
+    margin: 0;
+}
+
+.onboarding-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.cards-stack {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    height: 600px;
+    perspective: 1000px;
+}
+
+.swipe-card {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #FFFFFF 0%, var(--pastel-rose) 100%);
+    border-radius: 32px;
+    box-shadow: 0 20px 60px rgba(255, 182, 193, 0.3);
+    padding: 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: grab;
+    user-select: none;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    transform-origin: center;
+}
+
+.swipe-card:active {
+    cursor: grabbing;
+}
+
+.swipe-card.swiping {
+    transition: none;
+}
+
+.swipe-card.swipe-right {
+    animation: swipeRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.swipe-card.swipe-left {
+    animation: swipeLeft 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes swipeRight {
+    to {
+        transform: translateX(150%) rotate(30deg);
+        opacity: 0;
+    }
+}
+
+@keyframes swipeLeft {
+    to {
+        transform: translateX(-150%) rotate(-30deg);
+        opacity: 0;
+    }
+}
+
+/* Stack effect for cards behind */
+.swipe-card:nth-child(2) {
+    transform: scale(0.95) translateY(20px);
+    opacity: 0.9;
+    z-index: 2;
+}
+
+.swipe-card:nth-child(3) {
+    transform: scale(0.9) translateY(40px);
+    opacity: 0.7;
+    z-index: 1;
+}
+
+.swipe-card:nth-child(n+4) {
+    transform: scale(0.85) translateY(60px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.card-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--pastel-blush), var(--pastel-peach));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4);
+}
+
+.card-icon svg {
+    width: 40px;
+    height: 40px;
+    color: white;
+}
+
+.card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark-gray);
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+}
+
+.card-description {
+    font-size: 1.05rem;
+    color: var(--text-soft-gray);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+.swipe-instructions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    margin-top: auto;
+}
+
+.swipe-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.swipe-action:hover {
+    opacity: 1;
+}
+
+.swipe-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.swipe-icon:hover {
+    transform: scale(1.1);
+}
+
+.swipe-icon.decline {
+    background: linear-gradient(135deg, #FF6B6B, #FFB6C1);
+}
+
+.swipe-icon.accept {
+    background: linear-gradient(135deg, #98D8C8, #6BCF7F);
+}
+
+.swipe-icon svg {
+    width: 28px;
+    height: 28px;
+    color: white;
+}
+
+.swipe-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #3A3A3A;
+}
+
+.progress-indicator {
+    position: absolute;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 1000;
+}
+
+.progress-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+.progress-dot.active {
+    background: var(--pastel-blush);
+    transform: scale(1.3);
+}
+
+.progress-dot.completed {
+    background: #6BCF7F;
+}
+
+/* Decline Modal */
+.decline-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    animation: fadeIn 0.3s ease;
+}
+
+.decline-modal.show {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.decline-content {
+    background: white;
+    border-radius: 24px;
+    padding: 2.5rem;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.decline-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #FF6B6B, #FFB6C1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.decline-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-dark-gray);
+    margin-bottom: 1rem;
+}
+
+.decline-message {
+    font-size: 1rem;
+    color: var(--text-soft-gray);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.decline-buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+.decline-btn {
+    flex: 1;
+    padding: 0.875rem;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.decline-btn:hover {
+    transform: translateY(-2px);
+}
+
+.decline-btn.reconsider {
+    background: linear-gradient(135deg, var(--pastel-blush), var(--pastel-peach));
+    color: white;
+    box-shadow: 0 5px 20px rgba(255, 182, 193, 0.3);
+}
+
+.decline-btn.exit {
+    background: #F0F0F0;
+    color: #3A3A3A;
+}
+
+/* Completion Screen */
+.completion-screen {
+    display: none;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+.completion-screen.show {
+    display: block;
+}
+
+.completion-icon {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #98D8C8, #6BCF7F);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    box-shadow: 0 20px 60px rgba(107, 207, 127, 0.4);
+}
+
+.completion-icon svg {
+    width: 60px;
+    height: 60px;
+    color: white;
+}
+
+.completion-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-dark-gray);
+    margin-bottom: 1rem;
+}
+
+.completion-message {
+    font-size: 1.1rem;
+    color: var(--text-soft-gray);
+    line-height: 1.7;
+    margin-bottom: 3rem;
+}
+
+.continue-btn {
+    padding: 1rem 3rem;
+    background: linear-gradient(135deg, var(--pastel-blush), var(--pastel-peach));
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(255, 182, 193, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.continue-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(255, 182, 193, 0.5);
+}
+
+@media (max-width: 768px) {
+    .swipe-card {
+        padding: 2rem 1.5rem;
+        height: 550px;
+    }
+
+    .card-title {
+        font-size: 1.3rem;
+    }
+
+    .card-description {
+        font-size: 1rem;
+    }
+
+    .card-icon {
+        width: 70px;
+        height: 70px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="onboarding-container">
+    <div class="progress-indicator" id="progressIndicator">
+        <div class="progress-dot active"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+        <div class="progress-dot"></div>
+    </div>
+
+    <div class="cards-stack" id="cardsStack">
+        <!-- Card 5: Final Confirmation -->
+        <div class="swipe-card" data-card="5" data-required="true">
+            <div class="card-content">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                        <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5z"/>
+                    </svg>
+                </div>
+                <h2 class="card-title">I Understand & Accept</h2>
+                <p class="card-description">
+                    By swiping right, I accept the Terms of Service, Privacy Policy, and allow SafeSpace to use my data only to protect me and improve my experience. I understand my choices remain confidential.
+                </p>
+            </div>
+            <div class="swipe-instructions">
+                <div class="swipe-action">
+                    <div class="swipe-icon decline" onclick="handleDecline(5)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </div>
+                    <span class="swipe-text">Decline</span>
+                </div>
+                <div class="swipe-action">
+                    <div class="swipe-icon accept" onclick="handleAccept(5)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                        </svg>
+                    </div>
+                    <span class="swipe-text">I Accept</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Privacy & Confidentiality -->
+        <div class="swipe-card" data-card="4" data-required="true">
+            <div class="card-content">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
+                        <path d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+                    </svg>
+                </div>
+                <h2 class="card-title">Your Privacy is Sacred</h2>
+                <p class="card-description">
+                    Your choices and data remain completely confidential. We will never share your personal identity or information without your explicit consent. Your trust is our priority.
+                </p>
+            </div>
+            <div class="swipe-instructions">
+                <div class="swipe-action">
+                    <div class="swipe-icon decline" onclick="handleDecline(4)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </div>
+                    <span class="swipe-text">Not Sure</span>
+                </div>
+                <div class="swipe-action">
+                    <div class="swipe-icon accept" onclick="handleAccept(4)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                        </svg>
+                    </div>
+                    <span class="swipe-text">I Trust You</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Emergency Contacts -->
+        <div class="swipe-card" data-card="3" data-required="false">
+            <div class="card-content">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+                    </svg>
+                </div>
+                <h2 class="card-title">Emergency Contact Access</h2>
+                <p class="card-description">
+                    We may request access to your emergency contacts so we can notify someone you trust if you trigger an SOS alert. This helps keep you safer in critical moments.
+                </p>
+            </div>
+            <div class="swipe-instructions">
+                <div class="swipe-action">
+                    <div class="swipe-icon decline" onclick="handleDecline(3)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </div>
+                    <span class="swipe-text">Not Now</span>
+                </div>
+                <div class="swipe-action">
+                    <div class="swipe-icon accept" onclick="handleAccept(3)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                        </svg>
+                    </div>
+                    <span class="swipe-text">Yes, Allow</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Route History -->
+        <div class="swipe-card" data-card="2" data-required="true">
+            <div class="card-content">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                        <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                    </svg>
+                </div>
+                <h2 class="card-title">Help Make Routes Safer</h2>
+                <p class="card-description">
+                    Your route history helps us identify high-risk areas for women, making the app safer for everyone in the community. Your privacy is always protected through anonymization.
+                </p>
+            </div>
+            <div class="swipe-instructions">
+                <div class="swipe-action">
+                    <div class="swipe-icon decline" onclick="handleDecline(2)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </div>
+                    <span class="swipe-text">No Thanks</span>
+                </div>
+                <div class="swipe-action">
+                    <div class="swipe-icon accept" onclick="handleAccept(2)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                        </svg>
+                    </div>
+                    <span class="swipe-text">I Consent</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 1: Location Access -->
+        <div class="swipe-card" data-card="1" data-required="true">
+            <div class="card-content">
+                <div class="card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+                    </svg>
+                </div>
+                <h2 class="card-title">Location Access for Safety</h2>
+                <p class="card-description">
+                    We collect location data to show you safer routes near you and provide real-time safety alerts. Your location is only used while the app is active. Do you agree to share your location?
+                </p>
+            </div>
+            <div class="swipe-instructions">
+                <div class="swipe-action">
+                    <div class="swipe-icon decline" onclick="handleDecline(1)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                        </svg>
+                    </div>
+                    <span class="swipe-text">Not Now</span>
+                </div>
+                <div class="swipe-action">
+                    <div class="swipe-icon accept" onclick="handleAccept(1)">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
+                        </svg>
+                    </div>
+                    <span class="swipe-text">I Agree</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Completion Screen -->
+    <div class="completion-screen" id="completionScreen">
+        <div class="completion-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0z"/>
+                <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
+            </svg>
+        </div>
+        <h1 class="completion-title">You're All Set!</h1>
+        <p class="completion-message">
+            Thank you for trusting us with your safety. We're honored to be part of your journey. Let's make the world a safer place together.
+        </p>
+        <button class="continue-btn" onclick="completeOnboarding()">Continue to SafeSpace</button>
+    </div>
+</div>
+
+<!-- Decline Modal -->
+<div class="decline-modal" id="declineModal">
+    <div class="decline-content">
+        <div class="decline-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="white" viewBox="0 0 16 16">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </svg>
+        </div>
+        <h3 class="decline-title">This Permission is Important</h3>
+        <p class="decline-message" id="declineMessage"></p>
+        <div class="decline-buttons">
+            <button class="decline-btn exit" onclick="closeDeclineModal()">Maybe Later</button>
+            <button class="decline-btn reconsider" onclick="reconsiderDecline()">I'll Accept</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentCardIndex = 0;
+let userResponses = {
+    location: null,
+    routeHistory: null,
+    emergencyContacts: null,
+    privacy: null,
+    finalAccept: null
+};
+
+const declineMessages = {
+    1: "Without location access, we cannot provide safer route suggestions or real-time safety alerts. This feature is essential for your protection.",
+    2: "Route history helps us identify dangerous areas and protect the entire community. This is a required feature for the app to function effectively.",
+    3: "Emergency contacts are optional, but they provide an extra layer of safety if you ever need help. You can always add them later in settings.",
+    4: "We understand privacy concerns. We're committed to keeping your data secure and confidential. This acceptance is required to use the app.",
+    5: "By accepting our terms, you help us serve you better. We promise to always prioritize your safety and privacy."
+};
+
+const cards = document.querySelectorAll('.swipe-card');
+const progressDots = document.querySelectorAll('.progress-dot');
+let startX, startY, currentX, currentY;
+let isDragging = false;
+let currentCard;
+
+// Initialize touch/mouse events
+cards.forEach(card => {
+    card.addEventListener('mousedown', handleDragStart);
+    card.addEventListener('touchstart', handleDragStart);
+});
+
+document.addEventListener('mousemove', handleDragMove);
+document.addEventListener('touchmove', handleDragMove);
+document.addEventListener('mouseup', handleDragEnd);
+document.addEventListener('touchend', handleDragEnd);
+
+function handleDragStart(e) {
+    if (e.target.closest('.swipe-icon')) return; // Don't drag when clicking buttons
+    
+    currentCard = e.currentTarget;
+    if (currentCard !== cards[currentCardIndex]) return;
+    
+    isDragging = true;
+    currentCard.classList.add('swiping');
+    
+    const touch = e.type.includes('touch') ? e.touches[0] : e;
+    startX = touch.clientX;
+    startY = touch.clientY;
+}
+
+function handleDragMove(e) {
+    if (!isDragging) return;
+    
+    const touch = e.type.includes('touch') ? e.touches[0] : e;
+    currentX = touch.clientX;
+    currentY = touch.clientY;
+    
+    const deltaX = currentX - startX;
+    const deltaY = currentY - startY;
+    const rotation = deltaX * 0.1;
+    
+    currentCard.style.transform = `translateX(${deltaX}px) translateY(${deltaY}px) rotate(${rotation}deg)`;
+    currentCard.style.opacity = 1 - Math.abs(deltaX) / 300;
+}
+
+function handleDragEnd(e) {
+    if (!isDragging) return;
+    
+    isDragging = false;
+    const deltaX = currentX - startX;
+    
+    if (Math.abs(deltaX) > 100) {
+        if (deltaX > 0) {
+            // Swiped right - accept
+            acceptCard(currentCard);
+        } else {
+            // Swiped left - decline
+            declineCard(currentCard);
+        }
+    } else {
+        // Return to original position
+        currentCard.classList.remove('swiping');
+        currentCard.style.transform = '';
+        currentCard.style.opacity = '';
+    }
+}
+
+function handleAccept(cardNumber) {
+    const card = document.querySelector(`[data-card="${cardNumber}"]`);
+    acceptCard(card);
+}
+
+function handleDecline(cardNumber) {
+    const card = document.querySelector(`[data-card="${cardNumber}"]`);
+    declineCard(card);
+}
+
+function acceptCard(card) {
+    const cardNumber = parseInt(card.dataset.card);
+    saveResponse(cardNumber, true);
+    
+    card.classList.remove('swiping');
+    card.classList.add('swipe-right');
+    
+    setTimeout(() => {
+        nextCard();
+    }, 500);
+}
+
+function declineCard(card) {
+    const cardNumber = parseInt(card.dataset.card);
+    const isRequired = card.dataset.required === 'true';
+    
+    card.classList.remove('swiping');
+    card.style.transform = '';
+    card.style.opacity = '';
+    
+    if (isRequired) {
+        showDeclineModal(cardNumber);
+    } else {
+        saveResponse(cardNumber, false);
+        card.classList.add('swipe-left');
+        setTimeout(() => {
+            nextCard();
+        }, 500);
+    }
+}
+
+function saveResponse(cardNumber, accepted) {
+    const responseKeys = ['location', 'routeHistory', 'emergencyContacts', 'privacy', 'finalAccept'];
+    userResponses[responseKeys[cardNumber - 1]] = accepted;
+}
+
+function nextCard() {
+    progressDots[currentCardIndex].classList.remove('active');
+    progressDots[currentCardIndex].classList.add('completed');
+    
+    currentCardIndex++;
+    
+    if (currentCardIndex < cards.length) {
+        progressDots[currentCardIndex].classList.add('active');
+    } else {
+        showCompletion();
+    }
+}
+
+function showDeclineModal(cardNumber) {
+    const modal = document.getElementById('declineModal');
+    const message = document.getElementById('declineMessage');
+    message.textContent = declineMessages[cardNumber];
+    modal.classList.add('show');
+    modal.dataset.cardNumber = cardNumber;
+}
+
+function closeDeclineModal() {
+    const modal = document.getElementById('declineModal');
+    modal.classList.remove('show');
+}
+
+function reconsiderDecline() {
+    const modal = document.getElementById('declineModal');
+    const cardNumber = parseInt(modal.dataset.cardNumber);
+    const card = document.querySelector(`[data-card="${cardNumber}"]`);
+    closeDeclineModal();
+    acceptCard(card);
+}
+
+function showCompletion() {
+    document.getElementById('cardsStack').style.display = 'none';
+    document.getElementById('progressIndicator').style.display = 'none';
+    document.getElementById('completionScreen').classList.add('show');
+    
+    // Save onboarding completion
+    saveOnboardingData();
+}
+
+function saveOnboardingData() {
+    // Save to session/localStorage
+    sessionStorage.setItem('onboardingCompleted', 'true');
+    sessionStorage.setItem('userAgreements', JSON.stringify(userResponses));
+    
+    // Send to backend
+    fetch('/api/save-onboarding', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(userResponses)
+    }).catch(err => console.log('Onboarding data saved locally'));
+}
+
+function completeOnboarding() {
+    window.location.href = "{{ url_for('main.index') }}";
+}
+</script>
+</body>
+</html>

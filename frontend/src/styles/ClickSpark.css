@@ -1,0 +1,66 @@
+.click-spark {
+  position: fixed;
+  pointer-events: none;
+  width: 8px;
+  height: 8px;
+  background: radial-gradient(circle, currentColor 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: sparkBurst 0.6s ease-out forwards;
+  z-index: 9999;
+}
+
+.click-spark::before,
+.click-spark::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: inherit;
+}
+
+.click-spark::before {
+  animation: sparkExpand 0.6s ease-out forwards;
+}
+
+.click-spark::after {
+  animation: sparkFade 0.6s ease-out forwards;
+}
+
+@keyframes sparkBurst {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkExpand {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkFade {
+  0% {
+    opacity: 1;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2);
+  }
+}
