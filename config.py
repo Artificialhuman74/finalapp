@@ -7,5 +7,7 @@ class Config:
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'mp3', 'wav', 'm4a', 'mp4', 'mov', 'pdf'}
     MAX_CONTENT_LENGTH = 100 * 1024 * 1024
     
-    # Gemini AI Configuration
-    GEMINI_API_KEY = 'AIzaSyB9i7ZuCj9-snQ8wd7udU1JY3lg51XutVQ'  # Get from https://ai.google.dev/
+    # Gemini AI Configuration (from environment)
+    GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+    GEMINI_MODEL = os.environ.get('GEMINI_MODEL', 'gemini-2.0-flash')
+    GEMINI_API_VERSION = os.environ.get('GEMINI_API_VERSION', 'v1')
