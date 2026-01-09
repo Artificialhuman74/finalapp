@@ -23,25 +23,9 @@ app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
 # Configure CORS to allow local network access with credentials
 # We need to allow the specific origin of the mobile device
 CORS(app, 
-     resources={r"/*": {"origins": [
-         "http://localhost:3000", 
-         "http://127.0.0.1:3000",
-         "http://192.168.0.3:3000",  # User's mobile IP
-         "http://192.168.0.4:3000",  # Potential other IP
-         "http://192.168.0.5:3000",
-         "http://192.168.0.6:3000",
-         "http://192.168.1.3:3000",
-         "http://192.168.1.4:3000",
-         "http://192.168.1.46:3000",
-         "https://192.168.1.46:3000", # HTTPS for mobile
-         "http://192.168.0.7:3000",   # New IP (Jan 5)
-         "https://192.168.0.7:3000",  # New IP HTTPS (Jan 5)
-         "http://10.46.221.177:3000", # New IP (Jan 5 - 2)
-         "https://10.46.221.177:3000",# New IP HTTPS (Jan 5 - 2)
-         "https://192.168.0.109:3000", # Mobile IP (Jan 5)
-         "https://localhost:3000"      # HTTPS for local
-     ]}},
-     supports_credentials=True)
+     resources={r"/*": {"origins": "*"}},
+     supports_credentials=True,
+     allow_headers=['Content-Type', 'Authorization', 'X-Requested-With'])
 
 # Load configuration from config.py
 from config import Config
