@@ -9,6 +9,12 @@ services:
         value: 3.10.0
       - key: SECRET_KEY
         generateValue: true
+      - key: GEMINI_API_KEY
+        value: YOUR_GEMINI_API_KEY_HERE
+      - key: GEMINI_MODEL
+        value: gemini-2.0-flash
+      - key: GEMINI_API_VERSION
+        value: v1
       - key: DATABASE_PATH
         value: /var/lib/data/women_safety.db
       - key: UPLOAD_FOLDER
