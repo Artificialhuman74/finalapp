@@ -27,12 +27,24 @@ def create_app():
     
     # Create database directory BEFORE using it
     db_dir = os.path.dirname(db_path)
-    if db_dir:
+    try:
+        if db_dir:
+            os.makedirs(db_dir, exist_ok=True)
+    except PermissionError:
+        # Fallback to /tmp if the configured path is not writable
+        db_path = '/tmp/women_safety.db'
+        db_dir = os.path.dirname(db_path)
         os.makedirs(db_dir, exist_ok=True)
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
     
     # Create upload folder
     upload_folder = app.config.get('UPLOAD_FOLDER', 'app/uploads/evidence')
-    os.makedirs(upload_folder, exist_ok=True)
+    try:
+        os.makedirs(upload_folder, exist_ok=True)
+    except PermissionError:
+        upload_folder = '/tmp/uploads'
+        os.makedirs(upload_folder, exist_ok=True)
+        app.config['UPLOAD_FOLDER'] = upload_folder
     
     # Initialize database
     from app.models import db

@@ -16,9 +16,9 @@ services:
       - key: GEMINI_API_VERSION
         value: v1
       - key: DATABASE_PATH
-        value: /var/lib/data/women_safety.db
+        value: /tmp/women_safety.db
       - key: UPLOAD_FOLDER
-        value: /var/lib/data/uploads
+        value: /tmp/uploads
     disk:
       name: data
       mountPath: /var/lib/data
