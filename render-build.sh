@@ -5,7 +5,7 @@ set -o errexit
 # Build Frontend
 echo "Building Frontend..."
 npm install --prefix frontend
-npm run build --prefix frontend
+CI=false npm run build --prefix frontend
 
 # Install Backend Dependencies
 echo "Installing Backend Dependencies..."
