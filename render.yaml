@@ -2,7 +2,7 @@ services:
   - type: web
     name: women-safety-backend
     env: python
-    buildCommand: ./render-build.sh
+    buildCommand: bash render-build.sh
     startCommand: gunicorn wsgi:app
     envVars:
       - key: PYTHON_VERSION
@@ -15,21 +15,6 @@ services:
         value: gemini-2.0-flash
       - key: GEMINI_API_VERSION
         value: v1
-      - key: DATABASE_PATH
-        value: /var/lib/data/women_safety.db
-      - key: UPLOAD_FOLDER
-        value: /var/lib/data/uploads
-    disk:
-      name: data
-      mountPath: /var/lib/data
-      sizeGB: 1
-
-
-    envVars:
-      - key: PYTHON_VERSION
-        value: 3.10.0
-      - key: SECRET_KEY
-        generateValue: true
       - key: DATABASE_PATH
         value: /var/lib/data/women_safety.db
       - key: UPLOAD_FOLDER
