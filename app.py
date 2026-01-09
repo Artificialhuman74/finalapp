@@ -49,7 +49,9 @@ app.config.from_object(Config)
 
 # Additional app configuration for database and sessions
 app.config['SECRET_KEY'] = app.config.get('SECRET_KEY', 'your-secret-key-change-this-in-production-2024')
-app.config['UPLOAD_FOLDER'] = app.config.get('UPLOAD_FOLDER', 'app/uploads/evidence')
+upload_folder = app.config.get('UPLOAD_FOLDER', 'app/uploads/evidence')
+os.makedirs(upload_folder, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = upload_folder
 app.config['MAX_CONTENT_LENGTH'] = app.config.get('MAX_CONTENT_LENGTH', 100 * 1024 * 1024)
 
 # Session Configuration for HTTPS (Relaxed for local mobile testing)
@@ -57,9 +59,22 @@ app.config['SESSION_COOKIE_SECURE'] = False # Allow HTTP for local dev
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax' # Allow same-site (IP) requests
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 
-# Database configuration
+# Database configuration with automatic directory creation
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'instance', 'women_safety.db')
+
+# Use DATABASE_PATH env var (for Render), fall back to local instance/
+db_path = os.environ.get('DATABASE_PATH')
+if db_path:
+    # Ensure parent directory exists for Render
+    db_dir = os.path.dirname(db_path)
+    os.makedirs(db_dir, exist_ok=True)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
+else:
+    # Local default
+    instance_dir = os.path.join(basedir, 'instance')
+    os.makedirs(instance_dir, exist_ok=True)
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(instance_dir, 'women_safety.db')
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
