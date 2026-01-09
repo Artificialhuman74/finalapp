@@ -21,11 +21,12 @@ numpy==1.26.4
 pandas==2.2.3
 
 # HTTPS Server Support
-gevent==24.2.1
+# Updated gevent to a version with prebuilt wheels for Python 3.13+
+gevent==24.11.1
 pyOpenSSL==24.1.0
 
-# Dev certificate generation
-cryptography==43.0.3
+# Dev certificate generation (compatible with pyOpenSSL 24.1.0)
+cryptography==42.0.8
 
 # Security & Password Hashing
 bcrypt==4.1.2

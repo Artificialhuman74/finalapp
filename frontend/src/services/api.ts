@@ -1,6 +1,18 @@
 import axios from 'axios';
 
-const API_BASE_URL = ''; // process.env.REACT_APP_API_URL || '';
+// Detect environment and set API URL accordingly
+const getApiUrl = () => {
+  // For development in browser
+  const w = window as any;
+  if (!w.cordova && !w.capacitor) {
+    return ''; // Use proxy (setupProxy.js)
+  }
+  // For Capacitor/mobile app - use remote backend
+  // Replace with your actual Render/deployment URL
+  return process.env.REACT_APP_API_URL || 'https://your-app.onrender.com';
+};
+
+const API_BASE_URL = getApiUrl();
 
 const api = axios.create({
   baseURL: API_BASE_URL,
