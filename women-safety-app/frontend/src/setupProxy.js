@@ -4,7 +4,7 @@ module.exports = function (app) {
     app.use(
         ['/api', '/login', '/signup', '/submit_report'],
         createProxyMiddleware({
-            target: 'https://localhost:5443',
+            target: 'http://localhost:5000',
             changeOrigin: true,
             secure: false,
             cookieDomainRewrite: "",

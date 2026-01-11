@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = ''; // Force relative path to use proxy
+const API_BASE_URL = process.env.REACT_APP_API_BASE || '';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
