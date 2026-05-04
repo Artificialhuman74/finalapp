@@ -1,6 +1,6 @@
-# 🏦 Gringotts – Women's Safety & Support Hub
+# 🏦 Sylvie – One App - Full Protection
 
-**Gringotts** is a comprehensive Flask-based safety application with AI assistance, safe route planning, instant SOS alerts, incident reporting, and an anonymous community support wall. It runs locally with HTTPS to enable secure browser permissions (location, microphone, camera, notifications).
+**Sylvie** is a comprehensive Flask-based safety application with AI assistance, safe route planning, instant SOS alerts, incident reporting, and an anonymous community support wall. It runs locally with HTTPS to enable secure browser permissions (location, microphone, camera, notifications).
 
 ## ✨ Key Features
 

@@ -27,7 +27,7 @@ subject = issuer = x509.Name([
     x509.NameAttribute(NameOID.COUNTRY_NAME, "IN"),
     x509.NameAttribute(NameOID.STATE_OR_PROVINCE_NAME, "Karnataka"),
     x509.NameAttribute(NameOID.LOCALITY_NAME, "Bangalore"),
-    x509.NameAttribute(NameOID.ORGANIZATION_NAME, "Gringotts Safety"),
+    x509.NameAttribute(NameOID.ORGANIZATION_NAME, "Sylvie Safety"),
     x509.NameAttribute(NameOID.COMMON_NAME, "localhost"),
 ])
 

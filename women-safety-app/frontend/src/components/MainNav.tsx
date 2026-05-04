@@ -12,7 +12,7 @@ const MainNav: React.FC = () => {
       <div className="nav-container">
         <Link to="/" className="nav-brand">
           <span className="brand-icon">🛡️</span>
-          <span className="brand-name">Gringotts</span>
+          <span className="brand-name">Sylvie</span>
         </Link>
 
         <div className="nav-links">
