@@ -91,13 +91,11 @@ def allowed_file(filename):
 # ============ AUTHENTICATION ROUTES ============
 @bp.route('/user-agreement')
 def user_agreement():
-    """Display user agreement, terms of service, and privacy policy with interactive cards."""
-    return render_template('user_agreement.html')
+    abort(404)
 
 @bp.route('/onboarding')
 def onboarding_swipe():
-    """Display interactive swipe cards for onboarding user agreements."""
-    return render_template('onboarding_swipe.html')
+    abort(404)
 
 @bp.route('/api/save-onboarding', methods=['POST'])
 def save_onboarding():
@@ -123,13 +121,11 @@ def save_onboarding():
 
 @bp.route('/reset-onboarding')
 def reset_onboarding():
-    """Reset onboarding status - for testing purposes."""
     session.pop('onboarding_completed', None)
     session.pop('user_agreements', None)
-    flash('Onboarding reset. You can now go through the onboarding flow again.', 'info')
-    return redirect(url_for('main.onboarding_swipe'))
+    return jsonify({'success': True, 'message': 'Onboarding reset'})
 
-@bp.route('/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=['POST'])
 @limiter.limit("10 per minute")
 def login():
     if request.method == 'POST':
@@ -144,10 +140,7 @@ def login():
             remember = request.form.get('remember') == 'on'
 
         if not email or not password:
-            if request.is_json:
-                return jsonify({'success': False, 'message': 'Email and password are required'}), 400
-            flash('Email and password are required.', 'danger')
-            return render_template('login.html')
+            return jsonify({'success': False, 'message': 'Email and password are required'}), 400
 
         user = User.query.filter_by(email=email).first()
 
@@ -181,11 +174,11 @@ def login():
         else:
             if request.is_json:
                 return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
-            flash('Invalid email or password. Please try again.', 'danger')
-    
-    return render_template('login.html')
+            return jsonify({'success': False, 'message': 'Invalid email or password'}), 401
 
-@bp.route('/signup', methods=['GET', 'POST'])
+    return jsonify({'success': False, 'message': 'Authentication failed'}), 401
+
+@bp.route('/signup', methods=['POST'])
 @limiter.limit("5 per minute")
 def signup():
     if request.method == 'POST':
@@ -239,48 +232,26 @@ def signup():
         
         # Input validation
         if not name or not email or not password or not username:
-            msg = 'Name, email, username, and password are required.'
-            if request.is_json:
-                return jsonify({'success': False, 'message': msg}), 400
-            flash(msg, 'danger')
-            return render_template('signup.html')
+            return jsonify({'success': False, 'message': 'Name, email, username, and password are required.'}), 400
 
         if not _EMAIL_RE.match(email):
-            msg = 'Invalid email address.'
-            if request.is_json:
-                return jsonify({'success': False, 'message': msg}), 400
-            flash(msg, 'danger')
-            return render_template('signup.html')
+            return jsonify({'success': False, 'message': 'Invalid email address.'}), 400
 
         if len(password) < 8:
-            msg = 'Password must be at least 8 characters.'
-            if request.is_json:
-                return jsonify({'success': False, 'message': msg}), 400
-            flash(msg, 'danger')
-            return render_template('signup.html')
+            return jsonify({'success': False, 'message': 'Password must be at least 8 characters.'}), 400
 
         if not re.match(r'^[a-zA-Z0-9_]{3,50}$', username):
-            msg = 'Username must be 3-50 characters and contain only letters, numbers, or underscores.'
-            if request.is_json:
-                return jsonify({'success': False, 'message': msg}), 400
-            flash(msg, 'danger')
-            return render_template('signup.html')
+            return jsonify({'success': False, 'message': 'Username must be 3-50 characters and contain only letters, numbers, or underscores.'}), 400
 
         # Check if email already exists
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
-            if request.is_json:
-                return jsonify({'success': False, 'message': 'Email already registered'}), 400
-            flash('Email already registered. Please login instead.', 'warning')
-            return redirect(url_for('main.login'))
-        
+            return jsonify({'success': False, 'message': 'Email already registered'}), 400
+
         # Check if username already exists
         existing_username = User.query.filter_by(username=username).first()
         if existing_username:
-            if request.is_json:
-                return jsonify({'success': False, 'message': 'Username already taken'}), 400
-            flash('Username already taken. Please choose a different username.', 'warning')
-            return render_template('signup.html')
+            return jsonify({'success': False, 'message': 'Username already taken'}), 400
         
         # Create new user
         new_user = User(
@@ -329,38 +300,12 @@ def signup():
         
         flash('Account created successfully! Welcome to SafeSpace.', 'success')
         return redirect(url_for('main.index'))
-    
-    return render_template('signup.html')
 
-@bp.route('/settings', methods=['GET', 'POST'])
+    return jsonify({'success': False, 'message': 'Signup failed'}), 400
+
+@bp.route('/settings')
 def settings():
-    if not session.get('logged_in'):
-        return redirect(url_for('main.login'))
-    user = User.query.get(session.get('user_id'))
-    if not user:
-        abort(404)
-    if request.method == 'POST':
-        # Update username if changed
-        new_username = request.form.get('username', '').strip()
-        if new_username and new_username != user.username:
-            # Check if username is already taken
-            existing_user = User.query.filter_by(username=new_username).first()
-            if existing_user:
-                flash('Username already taken. Please choose a different username.', 'warning')
-                return render_template('settings.html', user=user)
-            user.username = new_username
-            session['username'] = new_username
-        
-        # Update privacy settings
-        user.default_anonymous = request.form.get('default_anonymous') == 'on'
-        user.consent_share_with_police = request.form.get('consent_share_with_police') == 'on'
-        user.consent_share_photo_with_police = request.form.get('consent_share_photo_with_police') == 'on'
-        user.data_retention = request.form.get('data_retention') or user.data_retention
-        
-        db.session.commit()
-        flash('Settings updated successfully.', 'success')
-        return redirect(url_for('main.settings'))
-    return render_template('settings.html', user=user)
+    abort(404)
 
 @bp.route('/profile/export')
 def export_profile():
@@ -703,8 +648,7 @@ def delete_profile():
 @bp.route('/logout')
 def logout():
     session.clear()
-    flash('You have been logged out successfully.', 'info')
-    return redirect(url_for('main.login'))
+    return jsonify({'success': True, 'message': 'Logged out successfully'})
 
 @bp.route('/my_reports')
 def my_reports():
@@ -716,31 +660,23 @@ def my_reports():
     user_id = session.get('user_id')
     reports = IncidentReport.query.filter_by(user_id=user_id).order_by(IncidentReport.created_at.desc()).all()
     
-    return render_template('my_reports.html', reports=reports)
+    abort(404)
 
 @bp.route('/fake-call')
 def fake_call():
-    """AI-powered Fake Call (main). Use ?basic=1 to load legacy template as backup."""
-    basic = request.args.get('basic', '').lower() in ('1', 'true', 'yes')
-    if basic:
-        return render_template('fake_call.html')
-    return render_template('fake_call_ai.html')
+    abort(404)
 
 @bp.route('/fake-call-basic')
 def fake_call_basic():
-    """Legacy/basic fake call kept as backup"""
-    return render_template('fake_call.html')
+    abort(404)
 
 @bp.route('/sos-center')
 def sos_center():
-    """Emergency SOS Center page"""
-    # Use the original SOS Center layout (now with upgraded features)
-    return render_template('sos_center.html')
+    abort(404)
 
 @bp.route('/sos-pro')
 def sos_pro():
-    """Enhanced SOS page (ported from WOMENbest index.html)"""
-    return render_template('sos_pro.html')
+    abort(404)
 
 @bp.route('/api/sos-profile', methods=['GET'])
 def api_sos_profile():
@@ -807,8 +743,7 @@ def emergency_contacts():
         return redirect(url_for('main.login'))
     
     user_id = session['user_id']
-    contacts = EmergencyContact.query.filter_by(user_id=user_id, is_active=True).order_by(EmergencyContact.priority).all()
-    return render_template('emergency_contacts.html', contacts=contacts)
+    abort(404)
 
 @bp.route('/api/emergency-contacts', methods=['POST'])
 def api_add_contact():
@@ -914,9 +849,7 @@ def api_get_contacts():
 
 @bp.route('/track/<int:sos_id>')
 def track_sos(sos_id):
-    """Public SOS tracking page"""
-    alert = SOSAlert.query.get_or_404(sos_id)
-    return render_template('sos_track.html', alert=alert, sos_id=sos_id)
+    abort(404)
 
 @bp.route('/api/sos-track/<int:sos_id>')
 def api_sos_track(sos_id):
@@ -951,9 +884,7 @@ def sos_deactivate_page():
     
     user_id = session['user_id']
     # Get the most recent active alert for this user
-    alert = SOSAlert.query.filter_by(user_id=user_id, is_active=True).order_by(SOSAlert.trigger_time.desc()).first()
-    
-    return render_template('sos_deactivate.html', alert=alert)
+    abort(404)
 
 @bp.route('/api/sos-deactivate', methods=['POST'])
 def api_sos_deactivate():
@@ -1010,13 +941,11 @@ def api_sos_deactivate():
 
 @bp.route('/')
 def index():
-    """Main landing page with intro animation"""
-    return render_template('landing.html')
+    abort(404)
 
 @bp.route('/report')
 def report_incident():
-    """Incident report form"""
-    return render_template('incident_report_enhanced.html')
+    abort(404)
 
 @bp.route('/submit_report', methods=['POST'])
 def submit_report():
@@ -1108,12 +1037,11 @@ def submit_report():
     db.session.add(incident_report)
     db.session.commit()
     
-    # Store in session for next page
     session['report_data'] = report_data
     session['ai_summary'] = summary
     session['report_id'] = incident_report.id
-    
-    return redirect(url_for('main.show_summary'))
+
+    return jsonify({'success': True, 'report_id': incident_report.id, 'summary': summary})
 
 def generate_ai_summary(data):
     """Generate incident report summary using Gemini AI"""
@@ -1215,52 +1143,11 @@ def generate_first_person_story(data, ai_summary):
 
 @bp.route('/summary')
 def show_summary():
-    ai_summary = session.get('ai_summary', '')
-    report_data = session.get('report_data', {})
-    return render_template('report_summary.html', 
-                         summary=ai_summary, 
-                         report_data=report_data)
+    abort(404)
 
 @bp.route('/download_report')
 def download_report():
-    """Download AI report as text file"""
-    # Check if specific report_id is requested
-    report_id = request.args.get('report_id')
-    
-    if report_id:
-        # Download specific report from database
-        report = IncidentReport.query.get(report_id)
-        if not report:
-            flash('Report not found.', 'danger')
-            return redirect(url_for('main.my_reports'))
-        
-        # Verify user owns this report
-        if session.get('user_id') != report.user_id:
-            flash('Access denied.', 'danger')
-            return redirect(url_for('main.my_reports'))
-        
-        ai_summary = report.ai_summary or 'No summary available'
-        report_date = report.created_at.strftime('%Y-%m-%d %H:%M:%S')
-    else:
-        # Use session data (for immediate download after submission)
-        ai_summary = session.get('ai_summary', 'No report available')
-        report_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    
-    # Create text content
-    content = f"""INCIDENT REPORT SUMMARY
-Generated: {report_date}
-
-{ai_summary}
-
----
-CONFIDENTIAL REPORT - SafeSpace Women's Safety Application
-"""
-    
-    # Create response with file download
-    response = make_response(content)
-    response.headers['Content-Type'] = 'text/plain'
-    response.headers['Content-Disposition'] = f'attachment; filename=incident_report_{datetime.now().strftime("%Y%m%d_%H%M%S")}.txt'
-    return response
+    abort(404)
 
 @bp.route('/final_actions', methods=['POST'])
 def final_actions():
@@ -1319,7 +1206,7 @@ def final_actions():
     if report_to_police:
         flash('Important: Please visit your nearest police station or call emergency services. Your report has been saved and can be downloaded.', 'info')
     
-    return redirect(url_for('main.community_support'))
+    return jsonify({'success': True})
 
 @bp.route('/community')
 def community_support():
@@ -1369,7 +1256,7 @@ def community_support():
             'comments': formatted_comments
         })
     
-    return render_template('community_support.html', posts=formatted_posts)
+    abort(404)
 
 # ---------------- SOS Center API Endpoints -----------------
 
@@ -1707,8 +1594,7 @@ def delete_post(post_id):
 
 @bp.route('/support-chat')
 def support_chat():
-    """AI support chatbot for emotional support and safety guidance"""
-    return render_template('support_chat.html')
+    abort(404)
 
 @bp.route('/api/chat', methods=['POST'])
 def chat_api():
@@ -2267,18 +2153,15 @@ def calculate_crime_exposure(lat, lon, radius=0.003):
 
 @bp.route('/safe-routes')
 def safe_routes():
-    """Render full-featured Safe Routes page with navbar."""
-    return render_template('safe_routes_FULL.html')
+    abort(404)
 
 @bp.route('/safe-routes-standalone')
 def safe_routes_standalone():
-    """Standalone Safe Routes UI mapped to full feature template."""
-    return render_template('safe_routes_FULL.html')
+    abort(404)
 
 @bp.route('/safe-routes-full')
 def safe_routes_full():
-     """Full-featured safe routes with turn-by-turn navigation, animations, saved locations, ratings, and themes"""
-     return render_template('safe_routes_FULL.html')
+    abort(404)
 
 @bp.route('/api/geocode')
 def api_geocode():
