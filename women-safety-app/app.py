@@ -14,26 +14,49 @@ from sqlalchemy import text
 
 load_dotenv()
 
+# Fail-fast on missing critical secrets
+if not os.environ.get('SECRET_KEY'):
+    import secrets as _s
+    os.environ.setdefault('SECRET_KEY', _s.token_hex(32))
+
 import os
 base_dir = os.path.dirname(os.path.abspath(__file__))
 template_dir = os.path.join(base_dir, 'app', 'templates')
 static_dir = os.path.join(base_dir, 'app', 'static')
 
 app = Flask(__name__, template_folder=template_dir, static_folder=static_dir)
-CORS(app)
+
+# Rate limiter — shared via app/extensions.py so blueprints can decorate routes
+from app.extensions import limiter
+limiter.init_app(app)
+
+# Restrict CORS to known origins; set ALLOWED_ORIGINS env var for production
+_allowed_origins = os.environ.get('ALLOWED_ORIGINS', 'http://localhost:3000,http://localhost:5000').split(',')
+CORS(app, origins=[o.strip() for o in _allowed_origins], supports_credentials=True)
 
 # Load configuration from config.py
 from config import Config
 app.config.from_object(Config)
 
 # Additional app configuration for database and sessions
-app.config['SECRET_KEY'] = app.config.get('SECRET_KEY', 'your-secret-key-change-this-in-production-2024')
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or app.config.get('SECRET_KEY')
 app.config['UPLOAD_FOLDER'] = app.config.get('UPLOAD_FOLDER', 'app/uploads/evidence')
 app.config['MAX_CONTENT_LENGTH'] = app.config.get('MAX_CONTENT_LENGTH', 16 * 1024 * 1024)
 
-# Database configuration
+# Secure session cookie settings
+app.config['SESSION_COOKIE_SECURE'] = os.environ.get('FLASK_ENV') != 'development'
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
+# Database: prefer DATABASE_URL (PostgreSQL on Railway), fall back to SQLite for local dev
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'instance', 'women_safety.db')
+_db_url = os.environ.get('DATABASE_URL', '')
+if _db_url.startswith('postgres://'):
+    # SQLAlchemy requires postgresql:// not postgres://
+    _db_url = _db_url.replace('postgres://', 'postgresql://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = _db_url or (
+    'sqlite:///' + os.path.join(basedir, 'instance', 'women_safety.db')
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize database
@@ -146,6 +169,18 @@ app.register_blueprint(routes.bp)
 @app.context_processor
 def inject_today():
     return {'today': datetime.now().strftime('%Y-%m-%d')}
+
+# Security headers on every response
+@app.after_request
+def set_security_headers(response):
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    response.headers['Permissions-Policy'] = 'geolocation=(self), microphone=(self), camera=(self)'
+    if os.environ.get('FLASK_ENV') != 'development':
+        response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    return response
 
 print("\n=== Initializing Safe Routes Backend ===")
 
@@ -1267,7 +1302,6 @@ def get_ml_model_info():
         }), 500
 
 @app.route('/api/health', methods=['GET'])
-
 def health_check():
     return jsonify({
         'success': True,
@@ -1383,8 +1417,11 @@ def submit_unsafe_segments():
         if feedback_count >= 50 and feedback_count % 50 == 0:
             print(f"  🤖 Triggering ML model retraining...")
             try:
-                import subprocess
-                subprocess.Popen(['python', os.path.join(base_dir, 'app', 'ml', 'train.py')], cwd=base_dir)
+                import subprocess, sys
+                train_script = os.path.normpath(os.path.join(base_dir, 'app', 'ml', 'train.py'))
+                # Use sys.executable so the correct venv Python is used; no shell=True
+                subprocess.Popen([sys.executable, train_script], cwd=base_dir,
+                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 print(f"  ✅ Model retraining started in background")
             except Exception as e:
                 print(f"  ⚠️ Could not start retraining: {e}")
@@ -1401,33 +1438,6 @@ def submit_unsafe_segments():
 # Note: Main routes (/, /login, /signup, /safe-routes, etc.) are handled by the blueprint
 
 if __name__ == '__main__':
-    print("\n" + "="*60)
-    print("🚀 Women's Safety App - FULL APPLICATION (HTTPS)")
-    print("="*60)
-    print(f"📊 Crime data: {len(crime_data)} records")
-    print(f"💡 Lighting data: {len(lighting_data)} points")
-    print(f"👥 Population data: {len(population_data)} points")
-    print("\nFeatures Available:")
-    print("✅ User Authentication (Login/Signup)")
-    print("✅ Incident Reporting")
-    print("✅ Safe Routes with crime analysis")
-    print("✅ Community Support")
-    print("✅ SOS Center")
-    print("✅ Emergency Contacts")
-    print("✅ Fake Call Feature")
-    print("="*60)
-    print("🔒 Running on HTTPS with self-signed certificate")
-    print("⚠️  Accept the security warning in your browser")
-    print("="*60 + "\n")
-    
-    # Use HTTPS with self-signed certificate
-    import os
-    cert_file = os.path.join(os.path.dirname(__file__), 'cert.pem')
-    key_file = os.path.join(os.path.dirname(__file__), 'key.pem')
-    
-    if os.path.exists(cert_file) and os.path.exists(key_file):
-        app.run(debug=True, host='0.0.0.0', port=5443, ssl_context=(cert_file, key_file))
-    else:
-        print("⚠️  SSL certificates not found! Run: python generate_cert.py")
-        print("    Falling back to HTTP on port 5000...")
-        app.run(debug=True, host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_ENV') == 'development'
+    app.run(host='0.0.0.0', port=port, debug=debug)

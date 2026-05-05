@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session, jsonify, make_response, abort
 from werkzeug.utils import secure_filename
 import os
+import re
 import json
 import requests
 import time
@@ -11,6 +12,10 @@ from app.auth_models import User
 from flask import send_from_directory
 
 bp = Blueprint('main', __name__)
+
+_EMAIL_RE = re.compile(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+
+from app.extensions import limiter
 
 # Gemini API configuration
 def _gemini_url():
@@ -125,20 +130,27 @@ def reset_onboarding():
     return redirect(url_for('main.onboarding_swipe'))
 
 @bp.route('/login', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")
 def login():
     if request.method == 'POST':
         if request.is_json:
-            data = request.get_json()
-            email = data.get('email')
-            password = data.get('password')
+            data = request.get_json() or {}
+            email = (data.get('email') or '').strip().lower()
+            password = data.get('password') or ''
             remember = data.get('remember')
         else:
-            email = request.form.get('email')
-            password = request.form.get('password')
+            email = (request.form.get('email') or '').strip().lower()
+            password = request.form.get('password') or ''
             remember = request.form.get('remember') == 'on'
-        
+
+        if not email or not password:
+            if request.is_json:
+                return jsonify({'success': False, 'message': 'Email and password are required'}), 400
+            flash('Email and password are required.', 'danger')
+            return render_template('login.html')
+
         user = User.query.filter_by(email=email).first()
-        
+
         if user and user.check_password(password):
             # Set session
             session['user_id'] = user.id
@@ -174,6 +186,7 @@ def login():
     return render_template('login.html')
 
 @bp.route('/signup', methods=['GET', 'POST'])
+@limiter.limit("5 per minute")
 def signup():
     if request.method == 'POST':
         if request.is_json:
@@ -224,10 +237,35 @@ def signup():
             consent_share_photo_with_police = request.form.get('consent_share_photo_with_police') == 'on'
             data_retention = request.form.get('data_retention') or '1y'
         
-        # Validation
-        if not phone and not request.is_json: # Allow optional phone for JSON if needed, or enforce
-             pass # Simplified for now
-        
+        # Input validation
+        if not name or not email or not password or not username:
+            msg = 'Name, email, username, and password are required.'
+            if request.is_json:
+                return jsonify({'success': False, 'message': msg}), 400
+            flash(msg, 'danger')
+            return render_template('signup.html')
+
+        if not _EMAIL_RE.match(email):
+            msg = 'Invalid email address.'
+            if request.is_json:
+                return jsonify({'success': False, 'message': msg}), 400
+            flash(msg, 'danger')
+            return render_template('signup.html')
+
+        if len(password) < 8:
+            msg = 'Password must be at least 8 characters.'
+            if request.is_json:
+                return jsonify({'success': False, 'message': msg}), 400
+            flash(msg, 'danger')
+            return render_template('signup.html')
+
+        if not re.match(r'^[a-zA-Z0-9_]{3,50}$', username):
+            msg = 'Username must be 3-50 characters and contain only letters, numbers, or underscores.'
+            if request.is_json:
+                return jsonify({'success': False, 'message': msg}), 400
+            flash(msg, 'danger')
+            return render_template('signup.html')
+
         # Check if email already exists
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:

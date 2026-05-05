@@ -11,7 +11,8 @@ def create_app():
     except Exception:
         pass
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'your-secret-key-change-this-in-production-2024'
+    import secrets as _secrets
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or _secrets.token_hex(32)
     app.config['UPLOAD_FOLDER'] = 'app/uploads/evidence'
     app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
     

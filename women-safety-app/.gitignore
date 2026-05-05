@@ -1,0 +1,56 @@
+# Environment & secrets
+.env
+*.env
+!.env.example
+
+# SSL certs (never commit these)
+cert.pem
+key.pem
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+pip-wheel-metadata/
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Database (SQLite — use PostgreSQL on Railway)
+instance/
+*.db
+*.sqlite3
+
+# ML model files (large binaries)
+app/ml/models/*.pkl
+app/ml/data/route_logs/
+
+# Uploads
+app/uploads/
+
+# Logs
+logs/
+*.log
+app/uploads/sos/logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Node (frontend)
+node_modules/
+frontend/node_modules/
+frontend/build/
